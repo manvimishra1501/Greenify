@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Hub</title>
+  <style>
+    :root {
+      --primary-50: #f0fdf6;
+      --primary-100: #dcfce9;
+      --primary-200: #bbf7d4;
+      --primary-300: #86efb5;
+      --primary-400: #4ade8f;
+      --primary-500: #20df6c;
+      --primary-600: #16a34a;
+      --primary-700: #15803d;
+      --primary-800: #166534;
+      --primary-900: #14532d;
+      --primary-950: #052e16;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--primary-50);
+      display: flex;
+      height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background: var(--primary-600);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+    }
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      padding: 0.6rem;
+      margin: 0.2rem 0;
+      border-radius: 8px;
+      display: block;
+      transition: background 0.2s;
+    }
+    .sidebar a:hover {
+      background: var(--primary-500);
+    }
+
+    /* Main feed */
+    .main {
+      flex: 1;
+      padding: 1rem 2rem;
+      overflow-y: auto;
+    }
+
+    .post-box {
+      background: white;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 1rem;
+    }
+    .post-box textarea {
+      width: 100%;
+      border: 1px solid var(--primary-200);
+      border-radius: 8px;
+      padding: 0.6rem;
+      resize: none;
+      margin-bottom: 0.5rem;
+    }
+    .post-box input[type="file"] {
+      margin-bottom: 0.5rem;
+    }
+    .post-box button {
+      background: var(--primary-500);
+      border: none;
+      color: white;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .post-box button:hover {
+      background: var(--primary-600);
+    }
+
+    /* Posts */
+    .post {
+      background: white;
+      padding: 1rem;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+    .post h4 {
+      margin: 0 0 0.3rem 0;
+      color: var(--primary-700);
+    }
+    .post img {
+      max-width: 100%;
+      margin-top: 0.5rem;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Social Hub</h2>
+    <a href="studash.html">📊 Dashboard</a>
+    <a href="play.html">🎮 Play</a>
+    <a href="compete.html">🏆 Compete</a>
+    <a href="leaderboard.html">📋 Leaderboard</a>
+    <a href="notifications.html">🔔 Notifications</a>
+    <a href="MyCourses/learn.html">📘 My Courses</a>
+    <a href="MyAchievements.html">⭐ My Achievements</a>
+    <a href="helpSupport.html">❓ Help & Support</a>
+    <a href="settings.html">⚙️ Settings</a>
+    <a href="newsfeed.html">📰 News Feed</a>
+    <a href="userproj.html">💡 User Projects</a>
+  </div>
+
+  <!-- Main Feed -->
+  <div class="main">
+    <!-- Post Box -->
+    <div class="post-box">
+      <textarea id="postText" rows="3" placeholder="What's on your mind?"></textarea>
+      <input type="file" id="postImage" accept="image/*">
+      <br>
+      <button onclick="addPost()">Post</button>
+    </div>
+
+    <!-- Timeline -->
+    <div id="feed">
+      <div class="post">
+        <h4>Manvi Mishra</h4>
+        <p>Welcome to the Social Hub 🎉</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function addPost() {
+      const text = document.getElementById("postText").value;
+      const imageInput = document.getElementById("postImage");
+      if (!text && !imageInput.files.length) return;
+
+      const postDiv = document.createElement("div");
+      postDiv.className = "post";
+
+      const user = document.createElement("h4");
+      user.textContent = "You";
+      postDiv.appendChild(user);
+
+      if (text) {
+        const p = document.createElement("p");
+        p.textContent = text;
+        postDiv.appendChild(p);
+      }
+
+      if (imageInput.files.length) {
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(imageInput.files[0]);
+        postDiv.appendChild(img);
+      }
+
+      document.getElementById("feed").prepend(postDiv);
+
+      // Reset
+      document.getElementById("postText").value = "";
+      imageInput.value = "";
+    }
+  </script>
+
+</body>
+</html>

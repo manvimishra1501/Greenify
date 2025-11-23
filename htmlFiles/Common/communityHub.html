@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect" />
+  <link as="style"
+    href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Spline+Sans%3Awght%40400%3B500%3B700"
+    onload="this.rel='stylesheet'" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <title>Greenify</title>
+  <link rel="shortcut icon" href="../../Images/gamification (2).png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link href="data:image/x-icon;base64," rel="icon" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script type="module" src="../../jsFiles/logout.js"></script>
+
+  <style type="text/tailwindcss">
+    :root {
+      --primary-color: #20DF6C;
+    }
+    .bg-primary { background-color: var(--primary-color); }
+    .text-primary { color: var(--primary-color); }
+    .border-primary { border-color: var(--primary-color); }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    .tab-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 2px solid transparent;
+      padding: 0.5rem 1rem;
+      color: #555;
+      cursor: pointer;
+      font-weight: 600;
+      transition: color 0.3s, border-color 0.3s;
+    }
+    .tab-wrapper.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+    .tab-wrapper:hover:not(.active) { color: gray; }
+
+    /* Instagram-style grid for posts */
+    #social-feed-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+    .post img { width: 100%; height: auto; border-radius: 0.5rem; }
+    .post .profile-pic {
+      width: 40px; height: 40px; border-radius: 9999px;
+      object-fit: cover;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50" style="padding-bottom: 100px; font-family: 'Spline Sans', 'Noto Sans', sans-serif;">
+  <div class="relative flex min-h-screen flex-col overflow-x-hidden">
+
+    <!-- HEADER -->
+    <header class="flex items-center justify-between border-b border-gray-200 px-10 py-3">
+      <div class="flex items-center gap-4">
+        <img src="../../Images/gamification (2).png" class="w-10" alt="">
+        <a href="../Student/studash.html" class="text-lg font-bold text-gray-900">Greenify</a>
+      </div>
+      <nav class="flex items-center gap-8 text-gray-700 font-medium">
+        <a class="hover:text-gray-900" href="../Student/studash.html">Dashboard</a>
+        <a class="hover:text-gray-900" href="../Student/play.html">Play</a>
+        <a href="../Student/compete.html">Compete</a>
+        <a class="text-gray-900 font-semibold" href="../Common/communityHub.html">Community Hub</a>
+        <a class="hover:text-gray-900" href="../Student/leaderboard.html">Leaderboard</a>
+        <a class="hover:text-green-800 transition" href="../Common/avatars.html">Profile</a>
+      </nav>
+      <div class="flex items-center gap-4 relative">
+        <a href="./notifications.html" class="material-icons text-gray-600">notifications</a>
+        <div class="relative">
+          <input type="checkbox" id="dropdownToggle" class="hidden peer">
+          <label for="dropdownToggle" class="cursor-pointer flex items-center">
+            <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300">
+              <span class="material-icons text-gray-500">person</span>
+            </div>
+          </label>
+          <div class="absolute right-0 top-12 w-56 bg-white rounded-lg shadow-xl z-10 p-2 hidden peer-checked:block">
+            <a href="htmlFiles/../../Student/MyCourses/learn.html" class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
+              <span class="material-symbols-outlined text-base">school</span> My Courses
+            </a>
+            <a href="htmlFiles/../../Student/MyAchievements.html" class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
+              <span class="material-symbols-outlined text-base">emoji_events</span> My Achievements
+            </a>
+            <a href="./helpSupport.html" class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
+              <span class="material-symbols-outlined text-base">help</span> Help & Support
+            </a>
+            <a href="htmlFiles/../../Student/settings.html" class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
+              <span class="material-symbols-outlined text-base">settings</span> Settings
+            </a>
+            <div class="my-1 border-t border-gray-100"></div>
+            <a id="logoutButton" class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md" href="">
+              <span class="material-symbols-outlined text-base">logout</span> Sign Out
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="flex-1 px-10 py-10">
+      <h2 class="text-4xl font-bold mb-6 text-gray-900">Community Hub</h2>
+<!-- Today's Task Card -->
+<div id="task-card" class="bg-white shadow-lg rounded-xl p-6 mb-6 max-w-md mx-auto">
+  <div class="flex justify-between items-center mb-4">
+    <h3 class="text-xl font-bold text-gray-800">Today's Task</h3>
+    <span class="text-sm text-gray-500" id="task-date"></span>
+  </div>
+  <p class="text-gray-700 mb-4">🌱 Plant a tree in your neighborhood park</p>
+  
+  <!-- Timer -->
+  <div class="bg-gray-100 p-3 rounded-lg text-center">
+    <span class="font-semibold text-gray-800">Time Left:</span>
+    <div id="countdown" class="text-green-600 text-lg font-bold mt-1">00d 00h 00m 00s</div>
+  </div>
+</div>
+
+<script>
+  // Set task deadline
+  const deadline = new Date();
+  deadline.setHours(deadline.getHours() + 5); // 5 hours from now for example
+
+  function updateTimer() {
+    const now = new Date().getTime();
+    const distance = deadline - now;
+
+    if (distance < 0) {
+      document.getElementById("countdown").textContent = "Task Deadline Passed!";
+      clearInterval(timerInterval);
+      return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((distance / (1000 * 60)) % 60);
+    const seconds = Math.floor((distance / 1000) % 60);
+
+    document.getElementById("countdown").textContent = 
+      `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    
+    document.getElementById("task-date").textContent = deadline.toLocaleDateString();
+  }
+
+  updateTimer(); // Initial call
+  const timerInterval = setInterval(updateTimer, 1000);
+</script>
+
+      <!-- TABS -->
+      <div class="flex gap-4 mb-6">
+        <div class="tab-wrapper active" data-target="tab-all">All Posts</div>
+        <div class="tab-wrapper" data-target="tab-my">My Posts</div>
+        <div class="tab-wrapper" data-target="tab-tasks">Completed Tasks</div>
+      </div>
+
+      <!-- TAB CONTENTS -->
+      <div id="tab-all" class="tab-content active">
+        <!-- CREATE POST -->
+        <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 mb-8">
+          <textarea id="postText" placeholder="Write a caption..." class="w-full border rounded-lg p-3 mb-4 focus:ring-2 focus:ring-green-500"></textarea>
+          <div class="flex items-center gap-4">
+            <input type="file" id="postImage" accept="image/*" class="file:border-0 file:bg-green-50 file:text-green-700 file:rounded-full file:px-4 file:py-2 hover:file:bg-green-100">
+            <button onclick="addPost()" class="px-6 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600">Post</button>
+          </div>
+        </div>
+
+        <!-- POSTS GRID -->
+        <div id="social-feed-grid">
+          <!-- Sample Post 1 -->
+          <div class="post bg-white rounded-xl shadow-md p-4">
+            <div class="flex items-center gap-3 mb-3">
+              <img class="profile-pic" src="girl.png" alt="">
+              <span class="font-semibold text-gray-800">Alice</span>
+            </div>
+            <p class="text-gray-700 mb-2">Just planted 5 saplings today 🌱</p>
+            <img src="tree.jpeg" alt="">
+            <div class="flex gap-4 mt-2 text-gray-500 text-sm">
+              <button class="like-btn">👍 Like (<span class="like-count">0</span>)</button>
+              <button class="comment-toggle">💬 Comment</button>
+            </div>
+            <div class="comments mt-2 hidden">
+              <input type="text" placeholder="Write a comment..." class="comment-input w-full px-2 py-1 border rounded-lg mb-1">
+              <div class="comment-list text-sm text-gray-700"></div>
+            </div>
+          </div>
+
+          <!-- Sample Post 2 -->
+          <div class="post bg-white rounded-xl shadow-md p-4">
+            <div class="flex items-center gap-3 mb-3">
+              <img class="profile-pic" src="avatar.png" alt="">
+              <span class="font-semibold text-gray-800">Bob</span>
+            </div>
+            <p class="text-gray-700 mb-2">Collected plastic waste from the park ♻️</p>
+            <img src="plstic.jpeg" alt="">
+            <div class="flex gap-4 mt-2 text-gray-500 text-sm">
+              <button class="like-btn">👍 Like (<span class="like-count">0</span>)</button>
+              <button class="comment-toggle">💬 Comment</button>
+            </div>
+            <div class="comments mt-2 hidden">
+              <input type="text" placeholder="Write a comment..." class="comment-input w-full px-2 py-1 border rounded-lg mb-1">
+              <div class="comment-list text-sm text-gray-700"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MY POSTS TAB -->
+      <div id="tab-my" class="tab-content">
+        <div id="my-posts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- User posts will appear here -->
+        </div>
+      </div>
+
+      <!-- COMPLETED TASKS TAB -->
+      <div id="tab-tasks" class="tab-content">
+        <div class="bg-white p-6 rounded-xl shadow-md">
+          <h3 class="font-bold text-lg mb-4">Completed Tasks</h3>
+          <ul id="completedTasksList" class="list-disc list-inside text-gray-700">
+            <li>Plant a tree 🌱</li>
+            <li>Clean the park ♻️</li>
+          </ul>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    let ecoPoints = 0;
+
+    function addPost() {
+      const text = document.getElementById("postText").value;
+      const file = document.getElementById("postImage").files[0];
+      if (!text && !file) return;
+
+      const postDiv = document.createElement("div");
+      postDiv.className = "post bg-white rounded-xl shadow-md p-4";
+
+      postDiv.innerHTML = `
+        <div class="flex items-center gap-3 mb-3">
+          <img class="profile-pic" src="https://via.placeholder.com/40/87ceeb" alt="">
+          <span class="font-semibold text-gray-800">You</span>
+        </div>
+        <p class="text-gray-700 mb-2">${text}</p>
+      `;
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          postDiv.appendChild(img);
+          appendActions(postDiv);
+        }
+        reader.readAsDataURL(file);
+      } else {
+        appendActions(postDiv);
+      }
+
+      document.getElementById("social-feed-grid").prepend(postDiv);
+      document.getElementById("my-posts-grid").prepend(postDiv.cloneNode(true));
+
+      document.getElementById("postText").value = "";
+      document.getElementById("postImage").value = "";
+    }
+
+    function appendActions(post) {
+      const actionsDiv = document.createElement("div");
+      actionsDiv.className = "flex gap-4 mt-2 text-gray-500 text-sm";
+      actionsDiv.innerHTML = `
+        <button class="like-btn">👍 Like (<span class="like-count">0</span>)</button>
+        <button class="comment-toggle">💬 Comment</button>
+      `;
+      const commentsDiv = document.createElement("div");
+      commentsDiv.className = "comments mt-2 hidden";
+      commentsDiv.innerHTML = `
+        <input type="text" placeholder="Write a comment..." class="comment-input w-full px-2 py-1 border rounded-lg mb-1">
+        <div class="comment-list text-sm text-gray-700"></div>
+      `;
+      post.appendChild(actionsDiv);
+      post.appendChild(commentsDiv);
+      attachPostEvents(post);
+    }
+
+    function attachPostEvents(post) {
+      const likeBtn = post.querySelector(".like-btn");
+      const likeCount = post.querySelector(".like-count");
+      let likes = 0;
+      likeBtn.addEventListener("click", () => {
+        likes++;
+        likeCount.textContent = likes;
+        ecoPoints++;
+      });
+
+      const commentToggle = post.querySelector(".comment-toggle");
+      const commentsBox = post.querySelector(".comments");
+      const commentInput = post.querySelector(".comment-input");
+      const commentList = post.querySelector(".comment-list");
+
+      commentToggle.addEventListener("click", () => commentsBox.classList.toggle("hidden"));
+      commentInput?.addEventListener("keypress", (e) => {
+        if (e.key === "Enter" && commentInput.value.trim() !== "") {
+          const comment = document.createElement("p");
+          comment.textContent = commentInput.value;
+          comment.className = "bg-gray-100 px-2 py-1 rounded-lg";
+          commentList.appendChild(comment);
+          commentInput.value = "";
+          ecoPoints++;
+        }
+      });
+    }
+
+    document.querySelectorAll(".post").forEach(post => attachPostEvents(post));
+
+    // Tabs
+    const tabs = document.querySelectorAll('.tab-wrapper[data-target]');
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tabContents.forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.target).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
