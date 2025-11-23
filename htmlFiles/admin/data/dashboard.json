@@ -1,0 +1,11 @@
+{
+  "totalSchools": 55,
+  "totalTeachers": 125,
+  "totalStudents": 3200,
+  "ecoPoints": 175000,
+  "pendingApprovals": {
+    "teacherRegistrations": 5,
+    "schoolVerifications": 2,
+    "flaggedPosts": 3
+  }
+}

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GREENIFY Admin — Reports</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+  /* Reset & basics */
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+  body { background:#f4f8fb; color:#333; }
+
+  /* Top Navbar */
+  /* Top Navbar - Tab Style */
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 50px;
+  background: #ffffff; /* flat white background */
+  color: #333;
+  border-bottom: 2px solid #27ae60; /* underline for navbar */
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.top-nav .logo {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #27ae60;
+  letter-spacing: 1px;
+}
+
+.top-nav nav {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.top-nav nav a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 10px 18px;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+  border-radius: 4px 4px 0 0; /* top corners rounded */
+}
+
+.top-nav nav a:hover {
+  color: #27ae60;
+  border-bottom: 3px solid #27ae60; /* highlight underline on hover */
+}
+
+.top-nav nav a.active {
+  color: #27ae60;
+  border-bottom: 3px solid #27ae60; /* active tab highlight */
+  font-weight: 600;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 500;
+}
+
+.user-info img.avatar {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #27ae60;
+}
+
+
+  /* Main content */
+  .main-content { padding:30px 50px; }
+
+  /* Card style */
+  .card { background:#fff; border-radius:12px; padding:20px; margin-bottom:20px; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+  .card h2 { color:#27ae60; margin-bottom:10px; }
+
+  /* List */
+  ul { list-style:none; padding-left:0; }
+  li { padding:6px 0; }
+
+  /* Table */
+  table { width:100%; border-collapse:collapse; margin-top:10px; }
+  th, td { text-align:left; padding:12px; border-bottom:1px solid #ddd; }
+  tr:hover { background:#f1f1f1; }
+
+  /* Buttons */
+  .btn { padding:6px 12px; border:none; border-radius:6px; cursor:pointer; background:#27ae60; color:white; transition:0.3s; }
+  .btn:hover { background:#219150; }
+</style>
+</head>
+<body>
+
+<!-- Top Navbar -->
+<header class="top-nav">
+  <div class="logo">🌱 GREENIFY Admin</div>
+  <nav>
+    <a href="dashboard.html">🏠 Dashboard</a>
+    <a href="users.html">👩‍🏫 Users & Schools</a>
+    <a href="content.html">📚 Content</a>
+    <a href="competitions.html">🏆 Competitions</a>
+    <a href="reports.html" class="active">📊 Reports</a>
+    <a href="moderation.html">🛡️ SocialFeed</a>
+    <a href="partnerships.html">🤝 Partnerships</a>
+    <a href="settings.html">⚙️ Settings</a>
+  </nav>
+  <div class="user-info">Admin <button id="logoutBtn" class="btn">Logout</button></div>
+</header>
+
+<main class="main-content">
+  <!-- Platform Analytics -->
+  <div class="card">
+    <h2>Platform Analytics</h2>
+    <canvas id="analyticsChart" height="200"></canvas>
+  </div>
+
+  <!-- Other Metrics -->
+  <div class="card">
+    <h2>Other Metrics</h2>
+    <ul>
+      <li>Most Engaged Schools: Green Valley, Sunrise Academy, EcoHigh</li>
+      <li>Top Players by Eco Points: Priya Sharma, Rohit Verma</li>
+      <li>Task Completion Rates: 78%</li>
+    </ul>
+  </div>
+
+  <!-- Leaderboard -->
+  <div class="card">
+    <h2>Leaderboard</h2>
+    <button class="btn" id="addLeaderboardBtn">+ Add Entry</button>
+    <table>
+      <thead>
+        <tr><th>Rank</th><th>School/Teacher</th><th>Eco Points</th></tr>
+      </thead>
+      <tbody id="leaderboard">
+        <tr><td>1</td><td>Green Valley School</td><td>4500</td></tr>
+        <tr><td>2</td><td>Priya Sharma</td><td>4300</td></tr>
+        <tr><td>3</td><td>Sunrise Academy</td><td>4100</td></tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Logout button
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    window.location.href = 'index.html';
+  });
+
+  // Analytics chart
+  const ctx = document.getElementById('analyticsChart').getContext('2d');
+  const analyticsChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+      datasets: [{ label:'Tasks Completed', data:[120,150,170,200], backgroundColor:'#27ae60' }]
+    },
+    options: {
+      responsive:true,
+      plugins:{ legend:{ display:false } },
+      scales:{ y:{ beginAtZero:true } }
+    }
+  });
+
+  // Leaderboard add entry
+  const leaderboardBody = document.getElementById('leaderboard');
+  document.getElementById('addLeaderboardBtn').addEventListener('click', () => {
+    const name = prompt("Enter School/Teacher Name:")?.trim();
+    if (!name) return alert("Name is required!");
+    let points = parseInt(prompt("Enter Eco Points:"));
+    if (isNaN(points)) return alert("Points must be a number!");
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td></td><td>${name}</td><td>${points}</td>`;
+    leaderboardBody.appendChild(tr);
+
+    // Sort by points descending
+    const rows = Array.from(leaderboardBody.querySelectorAll('tr'));
+    rows.sort((a,b) => parseInt(b.cells[2].textContent) - parseInt(a.cells[2].textContent));
+    leaderboardBody.innerHTML = '';
+    rows.forEach((row,index) => { row.cells[0].textContent = index+1; leaderboardBody.appendChild(row); });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "activeUsersPerWeek": 520,
+  "mostEngagedSchools": ["Green High", "Eco Academy"],
+  "ecoPointsDistribution": {
+    "School A": 5000,
+    "School B": 4500
+  },
+  "taskCompletionRates": "85%"
+}

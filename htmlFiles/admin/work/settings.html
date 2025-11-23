@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GREENIFY Admin — Settings</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+  /* Reset & basics */
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+  body { background:#f4f8fb; color:#333; transition: background 0.3s, color 0.3s; }
+
+  /* Top Navbar */
+ /* Top Navbar - Tab Style */
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 50px;
+  background: #ffffff; /* flat white background */
+  color: #333;
+  border-bottom: 2px solid #27ae60; /* underline for navbar */
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.top-nav .logo {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #27ae60;
+  letter-spacing: 1px;
+}
+
+.top-nav nav {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.top-nav nav a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 10px 18px;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+  border-radius: 4px 4px 0 0; /* top corners rounded */
+}
+
+.top-nav nav a:hover {
+  color: #27ae60;
+  border-bottom: 3px solid #27ae60; /* highlight underline on hover */
+}
+
+.top-nav nav a.active {
+  color: #27ae60;
+  border-bottom: 3px solid #27ae60; /* active tab highlight */
+  font-weight: 600;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 500;
+}
+
+.user-info img.avatar {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #27ae60;
+}
+
+
+  /* Main Content */
+  .main-content { padding:30px 50px; max-width:800px; margin:auto; transition: background 0.3s, color 0.3s; }
+
+  /* Card */
+  .card { background:#fff; border-radius:12px; padding:25px; margin-bottom:25px; box-shadow:0 2px 6px rgba(0,0,0,0.1); transition: background 0.3s, color 0.3s; }
+  .card h2 { color:#27ae60; margin-bottom:15px; transition: color 0.3s; }
+
+  /* Form */
+  form { display:flex; flex-direction:column; gap:15px; }
+  label { font-weight:500; }
+  input, select { padding:8px 12px; border-radius:6px; border:1px solid #ccc; width:100%; }
+  input:focus, select:focus { outline:none; border-color:#27ae60; box-shadow:0 0 5px rgba(39,174,96,0.5); }
+
+  /* Buttons */
+  .btn { padding:8px 14px; border:none; border-radius:6px; cursor:pointer; background:#27ae60; color:white; font-weight:500; transition:0.3s; }
+  .btn:hover { background:#219150; }
+  .btn.primary { background:#2ecc71; }
+  .btn.primary:hover { background:#27ae60; }
+
+  /* Alerts */
+  .alert { margin-top:10px; padding:8px 12px; border-radius:6px; background:#dff0d8; color:#3c763d; display:none; }
+
+  /* Dark Theme */
+  body.dark { background:#1f1f1f; color:#eee; }
+  body.dark .card { background:#2b2b2b; color:#eee; }
+  body.dark .card h2 { color:#2ecc71; }
+  body.dark input, body.dark select { background:#444; color:#eee; border:1px solid #666; }
+  body.dark .top-nav { background:#222; }
+  body.dark .top-nav nav a.active { background:#2ecc71; color:#222; }
+</style>
+</head>
+<body>
+
+<!-- Top Navbar -->
+<header class="top-nav">
+  <div class="logo">🌱 GREENIFY Admin</div>
+  <nav>
+    <a href="dashboard.html">🏠 Dashboard</a>
+    <a href="users.html">👩‍🏫 Users & Schools</a>
+    <a href="content.html">📚 Content</a>
+    <a href="competitions.html">🏆 Competitions</a>
+    <a href="reports.html">📊 Reports</a>
+     <a href="moderation.html">🛡️ SocialFeed</a>
+    <a href="partnerships.html">🤝 Partnerships</a>
+    <a href="settings.html" class="active">⚙️ Settings</a>
+  </nav>
+  <div class="user-info">Admin <button id="logoutBtn" class="btn">Logout</button></div>
+</header>
+
+<main class="main-content">
+
+  <!-- Profile Card -->
+  <div class="card">
+    <h2>Profile</h2>
+    <form id="profileForm">
+      <label>Name:
+        <input type="text" id="profileName" value="Admin User" />
+      </label>
+      <label>Email:
+        <input type="email" id="profileEmail" value="admin@ecolearn.org" />
+      </label>
+      <button type="submit" class="btn primary">Save</button>
+      <div class="alert" id="profileAlert">Profile updated successfully!</div>
+    </form>
+  </div>
+
+  <!-- System Settings Card -->
+  <div class="card">
+    <h2>System Settings</h2>
+    <form id="systemForm">
+      <label>Theme:
+        <select id="themeSelect">
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </label>
+      <label>Eco-Point Algorithm:
+        <input type="text" id="ecoAlgorithm" value="v1.0" />
+      </label>
+      <button type="submit" class="btn primary">Update</button>
+      <div class="alert" id="systemAlert">System settings updated successfully!</div>
+    </form>
+  </div>
+
+</main>
+
+<script>
+  // Logout
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    window.location.href = 'index.html';
+  });
+
+  // Profile Form
+  document.getElementById('profileForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const name = document.getElementById('profileName').value.trim();
+    const email = document.getElementById('profileEmail').value.trim();
+    if(!name || !email){ alert('Please fill all fields'); return; }
+    const alertBox = document.getElementById('profileAlert');
+    alertBox.style.display='block';
+    setTimeout(()=> alertBox.style.display='none',2000);
+  });
+
+  // System Settings Form with Dark Theme
+  document.getElementById('systemForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const theme = document.getElementById('themeSelect').value;
+    const algo = document.getElementById('ecoAlgorithm').value.trim();
+    if(!algo){ alert('Please enter algorithm version'); return; }
+    const alertBox = document.getElementById('systemAlert');
+    alertBox.style.display='block';
+    setTimeout(()=> alertBox.style.display='none',2000);
+
+    // Apply theme
+    if(theme === 'dark') {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+  });
+</script>
+
+</body>
+</html>

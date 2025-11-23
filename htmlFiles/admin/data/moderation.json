@@ -1,0 +1,10 @@
+{
+  "flaggedContent": [
+    "Post 1 - inappropriate image",
+    "Post 2 - spam"
+  ],
+  "teacherModerationTasks": [
+    "Review Teacher A report",
+    "Verify flagged comment B"
+  ]
+}

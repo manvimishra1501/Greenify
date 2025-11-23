@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GREENIFY Admin — Dashboard</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    /* Reset & Base */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body { background: #eef6f3; color: #333; }
+
+  /* Top Navbar - Tab Style */
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 50px;
+  background: #ffffff; /* flat white background */
+  color: #333;
+  border-bottom: 2px solid #27ae60; /* underline for navbar */
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.top-nav .logo {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #27ae60;
+  letter-spacing: 1px;
+}
+
+.top-nav nav {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.top-nav nav a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 10px 18px;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+  border-radius: 4px 4px 0 0; /* top corners rounded */
+}
+
+.top-nav nav a:hover {
+  color: #27ae60;
+  border-bottom: 3px solid #27ae60; /* highlight underline on hover */
+}
+
+.top-nav nav a.active {
+  color: #27ae60;
+  border-bottom: 3px solid #27ae60; /* active tab highlight */
+  font-weight: 600;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 500;
+}
+
+.user-info img.avatar {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #27ae60;
+}
+
+
+    /* Main Content */
+    .main-content { padding: 40px 50px; max-width: 1300px; margin: auto; }
+
+    /* Cards */
+    .card { 
+      background: #fff; 
+      border-radius: 16px; 
+      padding: 25px 30px; 
+      margin-bottom: 25px; 
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08); 
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.15); }
+    .card h2, .card h3 { color: #27ae60; margin-bottom: 12px; letter-spacing: 0.5px; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 25px; margin-bottom: 20px; }
+
+    .card-grid .card p { font-size: 1.5rem; font-weight: 600; color: #2c3e50; }
+
+    /* Tables */
+    table { width: 100%; border-collapse: collapse; border-radius: 12px; overflow: hidden; box-shadow: 0 6px 15px rgba(0,0,0,0.08); }
+    th, td { padding: 14px 18px; text-align: left; transition: all 0.3s; }
+    th { background: linear-gradient(135deg, #27ae60, #20df6c); color: white; font-weight: 600; }
+    tr { background: #fff; }
+    tr:nth-child(even) { background: #f4f8fb; }
+    tr:hover { background: #dff0d8; transform: scale(1.01); }
+
+    /* Status badges */
+    .status { 
+      padding: 4px 10px; 
+      border-radius: 12px; 
+      font-weight: 600; 
+      font-size: 0.85rem; 
+      color: #fff; 
+      text-align: center; 
+      display: inline-block;
+    }
+    .status.live { background: #27ae60; }
+    .status.accepting { background: #f39c12; }
+    .status.completed { background: #7f8c8d; }
+
+    /* Footer */
+    footer { text-align: center; margin-top: 40px; color: #777; font-size: 0.9rem; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .top-nav { flex-direction: column; align-items: flex-start; }
+      .top-nav nav { justify-content: flex-start; gap: 10px; }
+      .main-content { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-nav">
+    <div class="logo">🌱 GREENIFY Admin</div>
+    <nav>
+      <a href="dashboard.html" class="active">🏠 Dashboard</a>
+      <a href="users.html">👩‍🏫 Users & Schools</a>
+      <a href="content.html">📚 Content</a>
+      <a href="competitions.html">🏆 Competitions</a>
+      <a href="reports.html">📊 Reports</a>
+       <a href="moderation.html">🛡️ SocialFeed</a>
+      <a href="partnerships.html">🤝 Partnerships</a>
+      <a href="settings.html">⚙️ Settings</a>
+    </nav>
+    <div class="user-info">
+      <img src="https://via.placeholder.com/45" alt="Admin" class="avatar">
+      <div>
+        <strong>Admin</strong><br>
+        <span>admin@GREENIFY.org</span>
+      </div>
+      <button id="logoutBtn" class="btn danger">Logout</button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <!-- Stats -->
+    <div class="card-grid">
+      <div class="card"><h3>Total Schools</h3><p>1,234</p></div>
+      <div class="card"><h3>Total Teachers</h3><p>8,765</p></div>
+      <div class="card"><h3>Total Students</h3><p>102,453</p></div>
+      <div class="card"><h3>Global Eco-Points</h3><p>4,321,987</p></div>
+    </div>
+
+    <!-- Competitions -->
+    <section class="card">
+      <div class="card-header" style="display:flex; justify-content: space-between; align-items: center;">
+        <h2>Active Competitions</h2>
+        <button class="btn primary" onclick="alert('Launching new competition!')">+ Launch Competition</button>
+      </div>
+      <table class="table">
+        <thead>
+          <tr><th>Name</th><th>Type</th><th>Status</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Plastic-Free July</td>
+            <td>Global</td>
+            <td><span class="status live">Live</span></td>
+            <td><button class="btn primary" onclick="alert('Managing Plastic-Free July')">Manage</button></td>
+          </tr>
+          <tr>
+            <td>City Clean-Up</td>
+            <td>National</td>
+            <td><span class="status accepting">Accepting</span></td>
+            <td><button class="btn primary" onclick="alert('Managing City Clean-Up')">Manage</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Quick Analytics -->
+    <section class="card">
+      <h2>Quick Analytics</h2>
+      <canvas id="miniChart" height="120"></canvas>
+    </section>
+
+    <footer>© GREENIFY Admin Portal 2025</footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Logout button
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      window.location.href = 'index.html';
+    });
+
+    // Mini chart example
+    const ctx = document.getElementById('miniChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+        datasets: [{
+          label: 'Eco Points',
+          data: [1200, 1500, 1800, 2000],
+          backgroundColor: '#27ae60',
+          borderRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, ticks: { stepSize: 500 } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

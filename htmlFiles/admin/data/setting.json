@@ -1,0 +1,11 @@
+{
+  "profile": {
+    "username": "admin",
+    "email": "admin@example.com"
+  },
+  "systemSettings": {
+    "themes": ["Light", "Dark"],
+    "gamificationRules": ["Daily Points", "Weekly Challenges"],
+    "ecoPointAlgorithms": ["Task Completion", "Quiz Score"]
+  }
+}

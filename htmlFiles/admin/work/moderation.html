@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GREENIFY Admin — SocialFeed</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+  /* Reset */
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+  body { background:#f4f8fb; color:#333; }
+
+  /* Top Navbar */
+  /* Top Navbar - Tab Style */
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 50px;
+  background: #ffffff; /* flat white background */
+  color: #333;
+  border-bottom: 2px solid #27ae60; /* underline for navbar */
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.top-nav .logo {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #27ae60;
+  letter-spacing: 1px;
+}
+
+.top-nav nav {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.top-nav nav a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 10px 18px;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+  border-radius: 4px 4px 0 0; /* top corners rounded */
+}
+
+.top-nav nav a:hover {
+  color: #27ae60;
+  border-bottom: 3px solid #27ae60; /* highlight underline on hover */
+}
+
+.top-nav nav a.active {
+  color: #27ae60;
+  border-bottom: 3px solid #27ae60; /* active tab highlight */
+  font-weight: 600;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 500;
+}
+
+.user-info img.avatar {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #27ae60;
+}
+
+
+  /* Main Content */
+  .main-content { padding:30px 50px; }
+
+  /* Cards */
+  .card { background:#fff; border-radius:12px; padding:20px; margin-bottom:20px; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+  .card h2 { color:#27ae60; margin-bottom:10px; }
+  .card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+
+  /* Tables */
+  table { width:100%; border-collapse:collapse; margin-top:10px; }
+  th, td { text-align:left; padding:12px; border-bottom:1px solid #ddd; }
+  tr:hover { background:#f1f1f1; }
+
+  /* Buttons */
+  .btn { border:none; padding:8px 14px; border-radius:6px; cursor:pointer; transition:0.3s; }
+  .btn.primary { background:#27ae60; color:white; }
+  .btn.primary:hover { background:#219150; }
+  .btn.danger { background:#e74c3c; color:white; }
+  .btn.danger:hover { background:#c0392b; }
+  .btn.secondary { background:#2980b9; color:white; }
+  .btn.secondary:hover { background:#1c5980; }
+
+  /* Search */
+  .search-box { width:100%; padding:8px 12px; margin-bottom:10px; border-radius:6px; border:1px solid #ccc; }
+
+  /* Social feed posts */
+  .feed-post { border:1px solid #ddd; border-radius:8px; padding:12px; margin-bottom:12px; background:#fafafa; }
+  .feed-header { display:flex; justify-content:space-between; margin-bottom:6px; font-weight:600; }
+  .feed-content { margin-bottom:6px; }
+  .feed-actions button { margin-right:6px; }
+</style>
+</head>
+<body>
+
+<!-- Top Navbar -->
+<header class="top-nav">
+  <div class="logo">🌱 GREENIFY Admin</div>
+  <nav>
+    <a href="dashboard.html">🏠 Dashboard</a>
+    <a href="users.html">👩‍🏫 Users & Schools</a>
+    <a href="content.html">📚 Content</a>
+    <a href="competitions.html">🏆 Competitions</a>
+    <a href="reports.html">📊 Reports</a>
+    <a href="moderation.html" class="active">🛡️ SocialFeed</a>
+    <a href="partnerships.html">🤝 Partnerships</a>
+    <a href="settings.html">⚙️ Settings</a>
+  </nav>
+  <div class="user-info">Admin <button id="logoutBtn" class="btn danger">Logout</button></div>
+</header>
+
+<main class="main-content">
+
+  <!-- Flagged Content -->
+  <section class="card">
+    <div class="card-header">
+      <h2>Flagged Content</h2>
+    </div>
+    <table id="flaggedTable">
+      <thead>
+        <tr><th>Post</th><th>Reported By</th><th>Reason</th><th>Action</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>“Spam message…”</td>
+          <td>Teacher A</td>
+          <td>Spam</td>
+          <td>
+            <button class="btn danger" onclick="removePost(this)">Remove</button>
+            <button class="btn primary" onclick="blockUser(this)">Block User</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Teacher Moderation -->
+  <section class="card">
+    <h2>Teacher Management</h2>
+    <table id="teacherTable">
+      <thead>
+        <tr><th>Name</th><th>Email</th><th>Status</th><th>Action</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Priya Sharma</td><td>priya@example.com</td><td id="status1">Active</td>
+          <td><button class="btn primary" onclick="toggleTeacher(this,'status1')">Suspend/Activate</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Student Moderation -->
+  <section class="card">
+    <h2>Student Management</h2>
+    <table id="studentTable">
+      <thead>
+        <tr><th>Name</th><th>Email</th><th>Status</th><th>Action</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Aayushi Singh</td><td>aayushi@example.com</td><td id="sstatus1">Active</td>
+          <td><button class="btn primary" onclick="toggleStudent(this,'sstatus1')">Suspend/Activate</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Social Feed Management -->
+  <section class="card">
+    <div class="card-header">
+      <h2>Social Feed</h2>
+      <input type="text" class="search-box" placeholder="Search posts..." id="searchFeed" onkeyup="filterFeed()">
+    </div>
+    <div id="socialFeed">
+      <div class="feed-post">
+        <div class="feed-header">Teacher A <span>2 hrs ago</span></div>
+        <div class="feed-content">Completed city cleanup challenge! 🌳</div>
+        <div class="feed-actions">
+          <button class="btn primary" onclick="likePost(this)">Like 👍</button>
+          <button class="btn secondary" onclick="commentPost(this)">Comment 💬</button>
+          <button class="btn danger" onclick="removePost(this)">Remove ❌</button>
+        </div>
+      </div>
+      <div class="feed-post">
+        <div class="feed-header">Student B <span>4 hrs ago</span></div>
+        <div class="feed-content">Uploaded eco-handbook summary. 📚</div>
+        <div class="feed-actions">
+          <button class="btn primary" onclick="likePost(this)">Like 👍</button>
+          <button class="btn secondary" onclick="commentPost(this)">Comment 💬</button>
+          <button class="btn danger" onclick="removePost(this)">Remove ❌</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // Logout button
+  document.getElementById('logoutBtn').addEventListener('click',()=>{window.location.href='index.html';});
+
+  // Remove flagged post
+  function removePost(btn){
+    const row = btn.closest('tr') || btn.closest('.feed-post');
+    row.remove();
+    alert('Removed successfully!');
+  }
+
+  // Block user
+  function blockUser(btn){
+    const row = btn.closest('tr');
+    row.cells[2].innerText='Blocked';
+    alert('User has been blocked!');
+  }
+
+  // Toggle Teacher/Student Status
+  function toggleTeacher(btn,statusId){ 
+    const cell=document.getElementById(statusId);
+    cell.innerText=cell.innerText==='Active'?'Suspended':'Active';
+  }
+  function toggleStudent(btn,statusId){ 
+    const cell=document.getElementById(statusId);
+    cell.innerText=cell.innerText==='Active'?'Suspended':'Active';
+  }
+
+  // Social Feed Actions
+  function likePost(btn){ alert('You liked this post!'); }
+  function commentPost(btn){ let c=prompt('Enter your comment:'); if(c){alert('Comment added!');} }
+
+  // Filter Social Feed
+  function filterFeed(){
+    const input=document.getElementById('searchFeed').value.toLowerCase();
+    const posts=document.querySelectorAll('#socialFeed .feed-post');
+    posts.forEach(p=>{
+      const text=p.querySelector('.feed-content').innerText.toLowerCase();
+      p.style.display=text.includes(input)?'block':'none';
+    });
+  }
+</script>
+
+</body>
+</html>

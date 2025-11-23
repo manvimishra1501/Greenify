@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>GREENIFY Admin — Content</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    /* Basic reset */
+    * { margin:0; padding:0; box-sizing:border-box; font-family: 'Poppins', sans-serif; }
+    body { background: #f4f8fb; color:#333; }
+
+    /* Top navbar */
+  /* Top Navbar - Tab Style */
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 50px;
+  background: #ffffff; /* flat white background */
+  color: #333;
+  border-bottom: 2px solid #27ae60; /* underline for navbar */
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.top-nav .logo {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #27ae60;
+  letter-spacing: 1px;
+}
+
+.top-nav nav {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.top-nav nav a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 10px 18px;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+  border-radius: 4px 4px 0 0; /* top corners rounded */
+}
+
+.top-nav nav a:hover {
+  color: #27ae60;
+  border-bottom: 3px solid #27ae60; /* highlight underline on hover */
+}
+
+.top-nav nav a.active {
+  color: #27ae60;
+  border-bottom: 3px solid #27ae60; /* active tab highlight */
+  font-weight: 600;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 500;
+}
+
+.user-info img.avatar {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #27ae60;
+}
+
+
+    /* Main content */
+    .main-content { padding:30px 50px; }
+
+    /* Cards */
+    .card { background:#fff; border-radius:12px; padding:20px; margin-bottom:20px; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+    .card h2 { color:#27ae60; margin-bottom:10px; }
+
+    /* Buttons */
+    .btn { border:none; padding:8px 14px; border-radius:6px; cursor:pointer; transition:0.3s; }
+    .btn.primary { background:#27ae60; color:white; }
+    .btn.primary:hover { background:#1e8449; }
+    .btn.danger { background:#e74c3c; color:white; }
+    .btn.danger:hover { background:#c0392b; }
+
+    /* Table */
+    table { width:100%; border-collapse:collapse; margin-top:15px; }
+    th, td { text-align:left; padding:12px; border-bottom:1px solid #ddd; }
+    tr:hover { background:#f1f1f1; }
+    
+    /* Highlighted row */
+    .highlighted { background-color:#fff3cd; }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="top-nav">
+    <div class="logo">🌱 GREENIFY Admin</div>
+    <nav>
+      <a href="dashboard.html">🏠 Dashboard</a>
+      <a href="users.html">👩‍🏫 Users & Schools</a>
+      <a href="content.html" class="active">📚 Content</a>
+      <a href="competitions.html">🏆 Competitions</a>
+      <a href="reports.html">📊 Reports</a>
+      <a href="moderation.html">🛡️ SocialFeed</a>
+      <a href="partnerships.html">🤝 Partnerships</a>
+      <a href="settings.html">⚙️ Settings</a>
+    </nav>
+    <div class="user-info">Admin <button id="logoutBtn" class="btn danger">Logout</button></div>
+  </header>
+
+  <main class="main-content">
+    <div class="card">
+      <h2>Resources</h2>
+      <button id="uploadBtn" class="btn primary">+ Upload Resource</button>
+      <table class="table" id="resourceTable">
+        <thead>
+          <tr><th>Title</th><th>Author</th><th>Status</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Eco Handbook</td>
+            <td>Admin</td>
+            <td>Published</td>
+            <td><button class="btn highlightBtn">Highlight</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      window.location.href = 'index.html';
+    });
+
+    const resourceTable = document.getElementById('resourceTable').querySelector('tbody');
+
+    // Upload Resource - adds a new row
+    document.getElementById('uploadBtn').addEventListener('click', () => {
+      const title = prompt('Enter resource title:');
+      if(!title) return;
+      const author = prompt('Enter author name:') || 'Admin';
+      const status = 'Draft';
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${title}</td>
+        <td>${author}</td>
+        <td>${status}</td>
+        <td><button class="btn highlightBtn">Highlight</button></td>
+      `;
+      resourceTable.appendChild(tr);
+    });
+
+    // Highlight button functionality (delegation)
+    resourceTable.addEventListener('click', (e) => {
+      if(e.target.classList.contains('highlightBtn')){
+        const btn = e.target;
+        const row = btn.parentElement.parentElement;
+        row.classList.toggle('highlighted');
+        btn.textContent = row.classList.contains('highlighted') ? 'Unhighlight' : 'Highlight';
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+[
+  {
+    "name": "John Doe",
+    "role": "Teacher",
+    "school": "Green School",
+    "status": "Pending"
+  },
+  {
+    "name": "Jane Smith",
+    "role": "Student",
+    "school": "Eco High",
+    "status": "Active"
+  },
+  {
+    "name": "Mike Johnson",
+    "role": "School Head",
+    "school": "Forest Academy",
+    "status": "Pending"
+  }
+]
