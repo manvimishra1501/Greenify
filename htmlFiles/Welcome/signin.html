@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>GREENIFY - Sign-in</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+</head>
+<body class="bg-gray-50">
+  <div class="flex min-h-screen items-center justify-center px-6 py-10">
+    <div class="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2 text-center">Sign In</h1>
+      <p class="text-gray-500 text-sm mb-6 text-center">
+        Sign in as Student, Educator, or Admin to continue your journey.
+      </p>
+
+      <!-- Role Selection -->
+      <div class="flex gap-3 mb-6">
+        <input type="radio" id="loginStudent" name="loginType" value="student" class="hidden peer/student" />
+        <label for="loginStudent" class="flex-1 flex items-center justify-center rounded-xl border px-4 h-11 cursor-pointer hover:bg-green-50 peer-checked/student:bg-green-100 peer-checked/student:border-green-500 peer-checked/student:text-green-700">Student</label>
+
+        <input type="radio" id="loginEducator" name="loginType" value="educator" class="hidden peer/educator" />
+        <label for="loginEducator" class="flex-1 flex items-center justify-center rounded-xl border px-4 h-11 cursor-pointer hover:bg-green-50 peer-checked/educator:bg-green-100 peer-checked/educator:border-green-500 peer-checked/educator:text-green-700">Educator</label>
+
+        <input type="radio" id="loginAdmin" name="loginType" value="admin" class="hidden peer/admin" />
+        <label for="loginAdmin" class="flex-1 flex items-center justify-center rounded-xl border px-4 h-11 cursor-pointer hover:bg-green-50 peer-checked/admin:bg-green-100 peer-checked/admin:border-green-500 peer-checked/admin:text-green-700">Admin</label>
+      </div>
+
+      <!-- Email -->
+      <input type="email" id="emaillogin" placeholder="Email Address"
+        class="w-full rounded-xl border-gray-300 focus:border-green-500 focus:ring-green-500 h-12 px-4 text-sm mb-4" />
+
+      <!-- Password -->
+      <div class="relative mb-6">
+        <input type="password" id="passwordlogin" placeholder="Password"
+          class="w-full rounded-xl border-gray-300 focus:border-green-500 focus:ring-green-500 h-12 px-4 text-sm" />
+        <span id="togglePassword"
+          class="absolute right-4 top-3 text-gray-400 cursor-pointer hover:text-gray-600 select-none">👁</span>
+      </div>
+
+      <!-- Continue Button -->
+      <button type="button" id="continueBtn"
+        class="w-full bg-green-500 hover:bg-green-600 text-white rounded-xl h-12 font-semibold transition transform hover:scale-[1.02] shadow-md">
+        Continue
+      </button>
+
+      <!-- Links -->
+      <p class="text-sm text-gray-600 text-center mt-2">
+        Don’t have an account?
+        <a href="register.html" class="text-green-600 font-semibold hover:underline">Sign up</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Password toggle
+    const togglePassword = document.getElementById("togglePassword");
+    const passwordInput = document.getElementById("passwordlogin");
+
+    togglePassword.addEventListener("click", () => {
+      const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+      passwordInput.setAttribute("type", type);
+      togglePassword.textContent = type === "password" ? "👁" : "🙈";
+    });
+
+    // Continue button logic
+    document.getElementById("continueBtn").addEventListener("click", () => {
+      const loginType = document.querySelector('input[name="loginType"]:checked')?.value;
+      if (!loginType) return alert("Please select a user type!");
+
+      if (loginType === "student") window.location.href = "../Student/studash.html";
+      else if (loginType === "educator") window.location.href = "../Educator/edudash.html";
+      else if (loginType === "admin") window.location.href = "../admin/work/dashboard.html";
+    });
+  </script>
+</body>
+</html>

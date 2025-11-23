@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>GREENIFY - Register</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+</head>
+<body class="bg-gray-50">
+  <div class="flex min-h-screen items-center justify-center px-6 py-10">
+    <div class="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md transition transform hover:scale-[1.01]">
+      <h1 class="text-3xl font-bold text-gray-900 mb-6 text-center">Registration</h1>
+
+      <!-- User type -->
+      <div class="flex gap-3 mb-6">
+        <input type="radio" id="student" name="userType" value="student" class="hidden peer/student" />
+        <label for="student" class="flex-1 flex items-center justify-center rounded-xl border px-4 h-11 cursor-pointer hover:bg-green-50 peer-checked/student:bg-green-100 peer-checked/student:border-green-500 peer-checked/student:text-green-700">Student</label>
+
+        <input type="radio" id="educator" name="userType" value="educator" class="hidden peer/educator" />
+        <label for="educator" class="flex-1 flex items-center justify-center rounded-xl border px-4 h-11 cursor-pointer hover:bg-green-50 peer-checked/educator:bg-green-100 peer-checked/educator:border-green-500 peer-checked/educator:text-green-700">Educator</label>
+
+        <input type="radio" id="admin" name="userType" value="admin" class="hidden peer/admin" />
+        <label for="admin" class="flex-1 flex items-center justify-center rounded-xl border px-4 h-11 cursor-pointer hover:bg-green-50 peer-checked/admin:bg-green-100 peer-checked/admin:border-green-500 peer-checked/admin:text-green-700">Admin</label>
+      </div>
+
+      <!-- Form -->
+      <form id="registerForm" class="space-y-5">
+        <input type="text" id="name" placeholder="Full Name" required class="w-full rounded-xl border-gray-300 focus:border-green-500 focus:ring-green-500 h-12 px-4 text-sm" />
+        <input type="text" id="school_name" placeholder="School Name (if applicable)" class="w-full rounded-xl border-gray-300 focus:border-green-500 focus:ring-green-500 h-12 px-4 text-sm" />
+        <input type="text" id="username" placeholder="Username" required class="w-full rounded-xl border-gray-300 focus:border-green-500 focus:ring-green-500 h-12 px-4 text-sm" />
+        <input type="email" id="email" placeholder="Email" required class="w-full rounded-xl border-gray-300 focus:border-green-500 focus:ring-green-500 h-12 px-4 text-sm" />
+        <div class="relative">
+          <input type="password" id="password" placeholder="Password" required minlength="6" class="w-full rounded-xl border-gray-300 focus:border-green-500 focus:ring-green-500 h-12 px-4 pr-10 text-sm" />
+          <span id="togglePassword" class="absolute right-4 top-3 text-gray-400 cursor-pointer hover:text-gray-600 select-none">👁</span>
+        </div>
+        <button type="button" id="signupBtn" class="w-full bg-green-500 hover:bg-green-600 text-white rounded-xl h-12 font-semibold transition transform hover:scale-[1.02] shadow-md">Register</button>
+      </form>
+
+      <p class="text-sm text-gray-600 text-center mt-6">
+        Already have an account?
+        <a href="./signin.html" class="text-green-600 font-semibold hover:underline">Sign in</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const togglePassword = document.getElementById("togglePassword");
+    const passwordInput = document.getElementById("password");
+
+    togglePassword.addEventListener("click", () => {
+      const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+      passwordInput.setAttribute("type", type);
+      togglePassword.textContent = type === "password" ? "👁" : "🙈";
+    });
+
+    document.getElementById("signupBtn").addEventListener("click", () => {
+      const userType = document.querySelector('input[name="userType"]:checked')?.value;
+      if(!userType) return alert("Please select a user type!");
+
+      // Redirect based on user type
+      if(userType === "student") window.location.href = "../Student/studash.html";
+      else if(userType === "educator") window.location.href = "../Educator/EduDash.html";
+      else if(userType === "admin") window.location.href = "../work/dashboard.html";
+    });
+  </script>
+</body>
+</html>
