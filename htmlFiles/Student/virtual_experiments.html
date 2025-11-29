@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Greenify - Virtual Experiments</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-sans">
+
+  <!-- HEADER -->
+  <header class="flex items-center justify-between bg-white shadow-md px-10 py-4">
+    <div class="flex items-center gap-4">
+      <img src="../../Images/gamification (2).png" class="w-10" alt="">
+      <a href="../Student/studash.html" class="text-xl font-bold text-gray-900">Greenify</a>
+    </div>
+    <nav class="flex items-center gap-6 text-gray-700 font-medium">
+      <a href="../Student/studash.html" class="hover:text-gray-900">Dashboard</a>
+      <a href="../Student/play.html" class="hover:text-gray-900">Play</a>
+      <a href="../Student/compete.html" class="hover:text-gray-900">Compete</a>
+      <a href="../Common/communityHub.html" class="text-gray-900 font-semibold">Community Hub</a>
+      <a href="../Student/leaderboard.html" class="hover:text-gray-900">Leaderboard</a>
+    </nav>
+  </header>
+
+  <!-- MAIN -->
+  <main class="px-10 py-10">
+    <h1 class="text-3xl font-bold text-gray-900 mb-6">🌐 Virtual Experiments</h1>
+    <p class="text-gray-600 mb-8">Explore interactive environmental experiments, learn by doing, and understand eco-science concepts.</p>
+
+    <!-- EXPERIMENTS GRID -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- Experiment 1 -->
+      <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+        <a href="./experiments/photosynthesis.html">
+          <img src="photo.jpg" 
+               alt="Photosynthesis Simulation" class="w-full h-48 object-cover">
+          <div class="p-4">
+            <h2 class="text-lg font-semibold text-gray-800 mb-2">Photosynthesis Simulation</h2>
+            <p class="text-gray-600 text-sm">Observe how sunlight, water, and CO₂ affect plant growth.</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Experiment 2 -->
+      <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+        <a href="./experiments/water_cycle.html">
+          <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" 
+               alt="Water Cycle Experiment" class="w-full h-48 object-cover">
+          <div class="p-4">
+            <h2 class="text-lg font-semibold text-gray-800 mb-2">Water Cycle Experiment</h2>
+            <p class="text-gray-600 text-sm">Explore evaporation, condensation, and precipitation in a virtual setup.</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Experiment 3 -->
+      <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+        <a href="./experiments/soil_pollution.html">
+          <img src="soil.jpg" 
+               alt="Soil Pollution Test" class="w-full h-48 object-cover">
+          <div class="p-4">
+            <h2 class="text-lg font-semibold text-gray-800 mb-2">Soil Pollution Test</h2>
+            <p class="text-gray-600 text-sm">Analyze the impact of chemicals and waste on soil health.</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Experiment 4 -->
+      <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+        <a href="./experiments/energy.html">
+          <img src="https://images.unsplash.com/photo-1593642634315-48f5414c3ad9?auto=format&fit=crop&w=400&q=80" 
+               alt="Energy Efficiency Lab" class="w-full h-48 object-cover">
+          <div class="p-4">
+            <h2 class="text-lg font-semibold text-gray-800 mb-2">Energy Efficiency Lab</h2>
+            <p class="text-gray-600 text-sm">Test ways to reduce energy consumption in daily life.</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Experiment 5 -->
+      <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+        <a href="./experiments/air_pollution.html">
+          <img src="https://images.unsplash.com/photo-1563298723-dcfebaa392e3?auto=format&fit=crop&w=400&q=80" 
+               alt="Air Pollution Tracker" class="w-full h-48 object-cover">
+          <div class="p-4">
+            <h2 class="text-lg font-semibold text-gray-800 mb-2">Air Pollution Tracker</h2>
+            <p class="text-gray-600 text-sm">Monitor air quality and understand pollutants' effects.</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Experiment 6 -->
+      <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+        <a href="./experiments/climate.html">
+          <img src="climatechange.jpg" 
+               alt="Climate Change Simulator" class="w-full h-48 object-cover">
+          <div class="p-4">
+            <h2 class="text-lg font-semibold text-gray-800 mb-2">Climate Change Simulator</h2>
+            <p class="text-gray-600 text-sm">Experiment with temperature, CO₂ levels, and global impact models.</p>
+          </div>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+</body>
+</html>

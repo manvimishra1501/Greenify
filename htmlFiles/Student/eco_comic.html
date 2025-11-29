@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Greenify - Eco Comic Maker</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Symbols+Outlined" rel="stylesheet">
+<style>
+  body { font-family: 'Arial', sans-serif; }
+  .comic-element { position: absolute; cursor: move; user-select: none; }
+  .speech-bubble { border: 2px solid #4ade80; background: #d1fae5; padding: 5px; min-width: 80px; min-height: 30px; resize: both; overflow: auto; }
+  .avatar { border-radius: 50%; cursor: move; position: absolute; }
+  .control-btn { cursor: pointer; padding: 2px 5px; border-radius: 3px; background: #e5e7eb; font-size: 12px; margin-right: 2px; }
+  #comicCanvas { min-height: 600px; max-height: 80vh; }
+
+ .avatar {
+  border-radius: 50%;
+  cursor: move;
+  position: absolute;
+  background: transparent !important; /* ensures no extra bg color */
+}
+
+
+</style>
+</head>
+<body class="bg-green-50">
+
+<header class="flex items-center justify-between border-b border-gray-200 px-10 py-3 bg-green-100 shadow-sm">
+  <div class="flex items-center gap-4">
+    <img class="w-10" src="greenify.png" alt="Greenify Logo">
+    <a href="#" class="text-2xl font-bold text-green-900 hover:text-green-800">GREENIFY</a>
+  </div>
+<!-- Navigation -->
+  <nav class="hidden md:flex items-center gap-6 text-gray-700 font-medium">
+    <a class="hover:text-green-800 transition" href="../Student/studash.html">Dashboard</a>
+    <a class="text-green-900 font-semibold" href="../Student/play.html">Play</a>
+    <a class="hover:text-green-800 transition" href="../Student/compete.html">Compete</a>
+    <a class="hover:text-green-800 transition" href="../Common/communityHub.html">Community Hub</a>
+    <a class="hover:text-green-800 transition" href="../Student/leaderboard.html">Leaderboard</a>
+  </nav>
+
+  <!-- Right: Score + Notifications + Profile -->
+  <div class="flex items-center gap-6">
+    <!-- Notifications -->
+    <a href="../../Common/notifications.html" class="material-icons text-gray-700 hover:text-green-700">notifications</a>
+
+    <!-- Profile Dropdown -->
+    <div class="relative">
+      <input type="checkbox" id="dropdownToggle" class="hidden peer">
+      <label for="dropdownToggle" class="flex items-center gap-2 cursor-pointer">
+        <div class="h-9 w-9 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300">
+          <span class="material-icons text-gray-600">person</span>
+        </div>
+      </label>
+      <div class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl z-10 p-2 hidden peer-checked:block">
+        <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-green-50 rounded-md"
+           href="../Common/avatars.html">
+          <span class="material-symbols-outlined text-base">face</span> Profile
+        </a>
+        <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-green-50 rounded-md"
+           href="../Student/MyCourses/climateChange.html">
+          <span class="material-symbols-outlined text-base">school</span> My Courses
+        </a>
+        <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-green-50 rounded-md"
+           href="../Student/MyAchievements.html">
+          <span class="material-symbols-outlined text-base">emoji_events</span> My Achievements
+        </a>
+        <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-green-50 rounded-md"
+           href="../Common/helpSupport.html">
+          <span class="material-symbols-outlined text-base">help</span> Help & Support
+        </a>
+        <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-green-50 rounded-md"
+           href="../Student/settings.html">
+          <span class="material-symbols-outlined text-base">settings</span> Settings
+        </a>
+        <div class="my-1 border-t border-gray-100"></div>
+        <a id="logoutButton" class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md" href="#">
+          <span class="material-symbols-outlined text-base">logout</span> Sign Out
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+
+<div class="max-w-7xl mx-auto px-10 py-6">
+  <h1 class="text-3xl font-bold text-green-900">🎨 Eco Comic Maker</h1>
+  <p class="mt-2 text-lg text-green-800">Create your own comic to raise awareness about the environment!</p>
+</div>
+
+<main class="max-w-7xl mx-auto px-10 py-6 grid md:grid-cols-3 gap-6">
+
+  <!-- Comic Canvas -->
+  <section class="md:col-span-2 bg-white shadow-lg rounded-2xl p-6 flex flex-col">
+    <h2 class="text-2xl font-semibold text-green-800 mb-4">Comic Canvas</h2>
+    
+    <!-- Background Selector -->
+    <select id="bgSelector" class="mb-3 border rounded p-2 text-green-900 font-medium">
+      <option value="forest.jpeg">Forest</option>
+      <option value="beach.jpeg">Beach</option>
+      <option value="city.jpeg">City</option>
+    </select>
+
+    <div id="comicCanvas" class="flex-1 border-2 border-dashed border-gray-300 rounded-xl bg-green-50 p-4 mb-4 relative overflow-auto">
+      <p class="text-gray-400 text-center mt-40">Your comic will appear here...</p>
+    </div>
+
+    <!-- Tools -->
+    <div class="flex gap-3 flex-wrap mb-3">
+      <button onclick="addCharacter('🌳')" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">🌳 Tree</button>
+      <button onclick="addCharacter('🦉')" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">🦉 Owl</button>
+      <button onclick="addCharacter('💧')" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">💧 Water Drop</button>
+      <button onclick="addSpeechBubble('rect')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">💬 Rect Bubble</button>
+      <button onclick="addSpeechBubble('round')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">💬 Round Bubble</button>
+      <button onclick="addSpeechBubble('circle')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">💬 Circle Bubble</button>
+      <button onclick="addAvatar('avatar.png')" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">🧑 Avatar1</button>
+      <button onclick="addAvatar('girl.png')" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">🧑 Avatar2</button>
+      <button onclick="clearCanvas()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">🗑 Clear</button>
+      <button onclick="saveComic()" class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition">💾 Save</button>
+    </div>
+  </section>
+
+  <!-- Elements Library -->
+  <aside class="bg-white shadow-lg rounded-2xl p-6">
+    <h2 class="text-2xl font-semibold text-green-800 mb-4">Elements Library</h2>
+    <p class="text-gray-700 mb-4">Click any element to add it to your comic.</p>
+    <div class="grid grid-cols-3 gap-3">
+      <button onclick="addCharacter('🌲')" class="bg-green-100 text-green-800 px-3 py-2 rounded-lg hover:bg-green-200">🌲</button>
+      <button onclick="addCharacter('🐿️')" class="bg-green-100 text-green-800 px-3 py-2 rounded-lg hover:bg-green-200">🐿️</button>
+      <button onclick="addCharacter('☀️')" class="bg-yellow-100 text-yellow-800 px-3 py-2 rounded-lg hover:bg-yellow-200">☀️</button>
+      <button onclick="addCharacter('🌧️')" class="bg-blue-100 text-blue-800 px-3 py-2 rounded-lg hover:bg-blue-200">🌧️</button>
+      <button onclick="addCharacter('🌻')" class="bg-yellow-100 text-yellow-800 px-3 py-2 rounded-lg hover:bg-yellow-200">🌻</button>
+      <button onclick="addCharacter('🦋')" class="bg-purple-100 text-purple-800 px-3 py-2 rounded-lg hover:bg-purple-200">🦋</button>
+    </div>
+  </aside>
+</main>
+
+<script>
+const canvas = document.getElementById('comicCanvas');
+const bgSelector = document.getElementById('bgSelector');
+let zIndexCounter = 1;
+
+// Background
+bgSelector.addEventListener('change', () => {
+  canvas.style.backgroundImage = `url(${bgSelector.value})`;
+  canvas.style.backgroundSize = 'cover';
+  canvas.style.backgroundPosition = 'center';
+});
+
+// Add character
+function addCharacter(char) {
+  const span = document.createElement('span');
+  span.textContent = char;
+  span.className = "comic-element text-3xl";
+  span.style.top = '50%';
+  span.style.left = '50%';
+  span.style.fontSize = '3rem';
+  span.style.zIndex = zIndexCounter++;
+  addControls(span);
+  makeDraggable(span);
+  canvas.appendChild(span);
+}
+
+// Add speech bubble
+function addSpeechBubble(shape='rect') {
+  const bubble = document.createElement('div');
+  bubble.contentEditable = true;
+  bubble.textContent = "Type here...";
+  bubble.className = "speech-bubble comic-element";
+  bubble.style.top = '60%';
+  bubble.style.left = '50%';
+  bubble.style.width = '120px';
+  bubble.style.height = '50px';
+  if(shape === 'round') bubble.style.borderRadius = '20px';
+  if(shape === 'circle') bubble.style.borderRadius = '50%';
+  bubble.style.zIndex = zIndexCounter++;
+  addControls(bubble);
+  makeDraggable(bubble, true);
+  canvas.appendChild(bubble);
+}
+
+// Add avatar
+function addAvatar(src) {
+  const img = document.createElement('img');
+  img.src = src; // must be transparent PNG
+  img.className = 'avatar comic-element';
+  img.style.top = '50%';
+  img.style.left = '50%';
+  img.style.width = '60px';
+  img.style.height = '60px';
+  img.style.zIndex = zIndexCounter++;
+  img.style.background = 'transparent';
+  makeDraggable(img, true);
+  canvas.appendChild(img);
+}
+
+// Clear canvas
+function clearCanvas() { canvas.innerHTML = ''; }
+
+// Save comic
+function saveComic() {
+  html2canvas(canvas).then(canvasImage => {
+    const link = document.createElement('a');
+    link.download = 'eco-comic.png';
+    link.href = canvasImage.toDataURL();
+    link.click();
+  });
+}
+
+// Draggable and resizable
+function makeDraggable(el, isResizable=false) {
+  let isDragging=false, offsetX, offsetY;
+  el.addEventListener('mousedown', e => {
+    isDragging=true;
+    offsetX=e.offsetX;
+    offsetY=e.offsetY;
+    el.style.zIndex = zIndexCounter++;
+  });
+  document.addEventListener('mousemove', e => {
+    if(!isDragging) return;
+    const rect = canvas.getBoundingClientRect();
+    el.style.left = `${e.clientX - rect.left - offsetX}px`;
+    el.style.top = `${e.clientY - rect.top - offsetY}px`;
+  });
+  document.addEventListener('mouseup', ()=>{ isDragging=false; });
+
+  if(isResizable) {
+    el.style.resize='both';
+    el.style.overflow='hidden';
+  }
+}
+
+// Add forward/backward controls
+function addControls(el) {
+  const ctrlDiv = document.createElement('div');
+  ctrlDiv.style.position='absolute';
+  ctrlDiv.style.top='-18px';
+  ctrlDiv.style.right='-18px';
+  ctrlDiv.innerHTML = `
+    <span class="control-btn" onclick="bringForward(this)">⬆️</span>
+    <span class="control-btn" onclick="sendBackward(this)">⬇️</span>
+  `;
+  el.appendChild(ctrlDiv);
+}
+
+function bringForward(btn) { 
+  const el = btn.parentElement.parentElement;
+  el.style.zIndex = zIndexCounter++;
+}
+function sendBackward(btn) {
+  const el = btn.parentElement.parentElement;
+  el.style.zIndex = 1;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adopt an Endangered Animal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .animal {
+      width: 150px;
+      transition: transform 0.3s;
+    }
+    .animal.happy { transform: translateY(-10px); }
+    .bar-bg { background-color: #e2e8f0; border-radius: 9999px; }
+    .bar-fill { background-color: #10b981; height: 12px; border-radius: 9999px; transition: width 0.3s; }
+    .action-btn { transition: transform 0.2s; }
+    .action-btn:hover { transform: scale(1.1); }
+    .stage-text { font-weight: bold; }
+  </style>
+</head>
+<body class="bg-green-50 font-sans min-h-screen flex flex-col items-center p-6">
+
+  <header class="w-full max-w-5xl mb-6 flex justify-between items-center bg-green-600 text-white p-4 rounded-lg shadow">
+    <h1 class="text-2xl font-bold">Adopt an Endangered Animal</h1>
+    <a href="../virtual_experiments.html" class="bg-white text-green-600 px-4 py-2 rounded hover:bg-gray-100 font-semibold">Back</a>
+  </header>
+
+  <main class="w-full max-w-5xl flex flex-col md:flex-row gap-6">
+
+    <!-- Animal Display -->
+    <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center w-full md:w-1/2">
+      <h2 class="text-xl font-bold mb-4">Your Animal</h2>
+      <img id="animalImg" src="https://i.imgur.com/8Km9tLL.png" alt="Endangered Animal" class="animal mb-4">
+      <p class="stage-text text-gray-700 mb-2">Stage: <span id="growthStage">Baby</span></p>
+
+      <!-- Mood -->
+      <p class="text-gray-700 mb-4">Mood: <span id="mood">Neutral</span></p>
+
+      <!-- Health & Growth Bars -->
+      <div class="w-full mb-3">
+        <p class="text-gray-700 text-sm mb-1">Health</p>
+        <div class="bar-bg w-full h-3"><div id="healthBar" class="bar-fill w-3/4"></div></div>
+      </div>
+      <div class="w-full mb-3">
+        <p class="text-gray-700 text-sm mb-1">Growth</p>
+        <div class="bar-bg w-full h-3"><div id="growthBar" class="bar-fill w-1/4"></div></div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex gap-4 mt-6">
+        <button onclick="feedAnimal()" class="action-btn bg-yellow-400 px-4 py-2 rounded shadow hover:bg-yellow-500">Feed</button>
+        <button onclick="playAnimal()" class="action-btn bg-blue-400 px-4 py-2 rounded shadow hover:bg-blue-500">Play</button>
+        <button onclick="cleanAnimal()" class="action-btn bg-gray-400 px-4 py-2 rounded shadow hover:bg-gray-500">Clean</button>
+        <button onclick="healAnimal()" class="action-btn bg-red-400 px-4 py-2 rounded shadow hover:bg-red-500">Heal</button>
+      </div>
+    </div>
+
+    <!-- Environment / Info Panel -->
+    <div class="bg-white p-6 rounded-xl shadow-md w-full md:w-1/2 flex flex-col gap-4">
+      <h2 class="text-xl font-bold mb-2">Environment</h2>
+      <div id="environment" class="relative w-full h-64 rounded-lg bg-green-200 flex items-end justify-center overflow-hidden">
+        <p id="envText" class="absolute top-2 text-green-900 font-semibold">Your animal is comfortable.</p>
+      </div>
+
+      <div class="mt-4">
+        <h2 class="text-xl font-bold mb-2">Actions Log</h2>
+        <ul id="logList" class="list-disc list-inside text-gray-700 max-h-48 overflow-y-auto">
+          <li>Adopted a baby animal 🐾</li>
+        </ul>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    let health = 75;
+    let growth = 25;
+    let mood = "Neutral";
+    let stage = "Baby";
+
+    const healthBar = document.getElementById("healthBar");
+    const growthBar = document.getElementById("growthBar");
+    const moodText = document.getElementById("mood");
+    const growthStageText = document.getElementById("growthStage");
+    const animalImg = document.getElementById("animalImg");
+    const envText = document.getElementById("envText");
+    const logList = document.getElementById("logList");
+
+    function updateUI(action) {
+      healthBar.style.width = health + "%";
+      growthBar.style.width = growth + "%";
+      moodText.textContent = mood;
+      growthStageText.textContent = stage;
+
+      if (mood === "Happy") animalImg.classList.add("happy");
+      else animalImg.classList.remove("happy");
+
+      logList.insertAdjacentHTML("afterbegin", `<li>${action}</li>`);
+    }
+
+    function checkGrowthStage() {
+      if (growth < 30) stage = "Baby";
+      else if (growth < 70) stage = "Juvenile";
+      else stage = "Adult";
+    }
+
+    function feedAnimal() {
+      health = Math.min(100, health + 10);
+      growth = Math.min(100, growth + 5);
+      mood = "Happy";
+      envText.textContent = "Animal enjoyed the meal! 🍎";
+      checkGrowthStage();
+      updateUI("Fed the animal 🍎");
+    }
+
+    function playAnimal() {
+      health = Math.min(100, health + 5);
+      growth = Math.min(100, growth + 7);
+      mood = "Excited";
+      envText.textContent = "Animal is playing happily! 🐾";
+      checkGrowthStage();
+      updateUI("Played with the animal 🎾");
+    }
+
+    function cleanAnimal() {
+      health = Math.min(100, health + 8);
+      mood = "Content";
+      envText.textContent = "Animal's habitat is clean 🧹";
+      checkGrowthStage();
+      updateUI("Cleaned the habitat 🧹");
+    }
+
+    function healAnimal() {
+      health = Math.min(100, health + 15);
+      mood = "Healthy";
+      envText.textContent = "Animal is feeling better 💊";
+      checkGrowthStage();
+      updateUI("Healed the animal 💊");
+    }
+
+    updateUI("Adopted a baby animal 🐾");
+  </script>
+
+</body>
+</html>

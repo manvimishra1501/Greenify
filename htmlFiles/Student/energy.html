@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Energy Hero 🌟</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #fffbe6, #b2fefa);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+  }
+  h1 {
+    font-size: 3rem;
+    color: #ff8c00;
+    margin-top: 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+  }
+  #gameContainer {
+    position: relative;
+    width: 500px;
+    height: 400px;
+    background: #f5f5f5;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    margin: 20px 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .appliance {
+    width: 80px;
+    height: 80px;
+    margin: 10px;
+    background: #ffeb3b;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.3s;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+  .appliance.active {
+    background: #ff5722;
+    transform: scale(1.2);
+    animation: blink 0.5s infinite alternate;
+  }
+  @keyframes blink {
+    from {opacity: 1;}
+    to {opacity: 0.5;}
+  }
+  #scoreBoard {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #00695c;
+  }
+  #backButton {
+    margin-bottom: 30px;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    background: #00695c;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  #backButton:hover { background: #004d40; }
+</style>
+</head>
+<body>
+
+<h1>Energy Hero 🌟</h1>
+<div id="scoreBoard">Energy Saved: 0</div>
+<div id="gameContainer"></div>
+<button id="backButton" onclick="window.location.href='play.html'">⬅ Back to Play Page</button>
+
+<script>
+  const container = document.getElementById("gameContainer");
+  const scoreBoard = document.getElementById("scoreBoard");
+  let score = 0;
+
+  // Create appliances
+  const applianceTypes = ['💡','📺','🌀','🔌','💻'];
+  const appliances = [];
+
+  for(let i=0;i<12;i++){
+    const app = document.createElement("div");
+    app.classList.add("appliance");
+    const type = applianceTypes[Math.floor(Math.random()*applianceTypes.length)];
+    app.innerText = type;
+    container.appendChild(app);
+    appliances.push(app);
+    
+    app.addEventListener("click", ()=>{
+      if(app.classList.contains("active")){
+        score += 10;
+        scoreBoard.innerText = "Energy Saved: " + score;
+        app.classList.remove("active");
+      }
+    });
+  }
+
+  function activateRandomAppliance(){
+    const idx = Math.floor(Math.random()*appliances.length);
+    const appliance = appliances[idx];
+    appliance.classList.add("active");
+
+    // Deactivate after 2 seconds if not clicked
+    setTimeout(()=>{appliance.classList.remove("active")}, 2000);
+  }
+
+  setInterval(activateRandomAppliance, 1000); // new active appliance every second
+</script>
+</body>
+</html>

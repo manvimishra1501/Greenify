@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco Catch Game 🌍</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #a8edea, #fed6e3);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 20px 0;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin: 10px 0;
+      color: #2e7d32;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+    }
+    #backBtn {
+      margin-bottom: 15px;
+      padding: 8px 16px;
+      background-color: #2e7d32;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: background 0.3s, transform 0.2s;
+    }
+    #backBtn:hover {
+      background-color: #1b5e20;
+      transform: scale(1.05);
+    }
+    #gameContainer {
+      position: relative;
+      width: 500px;
+      height: 600px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 2px solid #2e7d32;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      overflow: hidden;
+      margin-bottom: 15px;
+    }
+    #player {
+      position: absolute;
+      bottom: 20px;
+      left: 225px;
+      width: 50px;
+      height: 50px;
+      background: #66bb6a;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .item {
+      position: absolute;
+      top: 0;
+      font-size: 1.8rem;
+      user-select: none;
+    }
+    #scoreBoard {
+      font-size: 1.3rem;
+      font-weight: bold;
+      background: rgba(46,125,50,0.2);
+      padding: 8px 16px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+  </style>
+</head>
+<body>
+  <button id="backBtn" onclick="location.href='play.html'">⬅ Back to Play Page</button>
+  <h1>♻ Eco Catch Challenge ♻</h1>
+  <div id="gameContainer">
+    <div id="player">🧺</div>
+  </div>
+  <div id="scoreBoard">Score: 0</div>
+
+  <script>
+    const container = document.getElementById("gameContainer");
+    const player = document.getElementById("player");
+    const scoreBoard = document.getElementById("scoreBoard");
+    let score = 0;
+    let playerPos = 225;
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft" && playerPos > 0) {
+        playerPos -= 20;
+      }
+      if (e.key === "ArrowRight" && playerPos < 450) {
+        playerPos += 20;
+      }
+      player.style.left = playerPos + "px";
+    });
+
+    function spawnItem() {
+      const item = document.createElement("div");
+      item.classList.add("item");
+      item.style.left = Math.floor(Math.random() * 460) + "px";
+      const goodItems = ["♻", "🌱", "🍎"];
+      const badItems = ["🛢", "🚬", "💀"];
+      const allItems = goodItems.concat(badItems);
+      item.innerText = allItems[Math.floor(Math.random() * allItems.length)];
+      container.appendChild(item);
+
+      let topPos = 0;
+      const fall = setInterval(() => {
+        if (topPos > 550) {
+          clearInterval(fall);
+          item.remove();
+        } else {
+          topPos += 5;
+          item.style.top = topPos + "px";
+
+          // Collision
+          const playerRect = player.getBoundingClientRect();
+          const itemRect = item.getBoundingClientRect();
+          const containerRect = container.getBoundingClientRect();
+          if (
+            playerRect.left < itemRect.right &&
+            playerRect.right > itemRect.left &&
+            playerRect.top < itemRect.bottom &&
+            playerRect.bottom > itemRect.top
+          ) {
+            if (["♻", "🌱", "🍎"].includes(item.innerText)) {
+              score += 10;
+            } else {
+              score -= 5;
+            }
+            scoreBoard.innerText = "Score: " + score;
+            clearInterval(fall);
+            item.remove();
+          }
+        }
+      }, 40);
+    }
+
+    setInterval(spawnItem, 1500);
+  </script>
+</body>
+</html>

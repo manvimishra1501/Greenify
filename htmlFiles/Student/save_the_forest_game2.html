@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Eco Rescue Adventure</title>
+<style>
+  body { 
+    font-family: 'Poppins', sans-serif; 
+    text-align: center; 
+    background: linear-gradient(135deg, #c8f7dc, #e0f2f1); 
+    margin: 0; 
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #gameWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  h1 { 
+    color:#00695c; 
+    font-size:3rem; 
+    margin-bottom:15px; 
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+  }
+  #backBtn {
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: #00796b;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: background 0.3s, transform 0.2s;
+  }
+  #backBtn:hover {
+    background-color: #004d40;
+    transform: scale(1.05);
+  }
+  #grid { 
+    display:grid; 
+    grid-template-columns: repeat(5, 80px); 
+    grid-gap:8px; 
+    margin:auto; 
+  }
+  .cell { 
+    width:80px; 
+    height:80px; 
+    border:2px solid #004d40; 
+    border-radius:12px; 
+    display:flex; 
+    align-items:center; 
+    justify-content:center; 
+    cursor:pointer; 
+    font-size:28px; 
+    background: #b2dfdb;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s, background 0.2s;
+  }
+  .cell:hover { 
+    transform: scale(1.1); 
+    background: #a7ffeb; 
+  }
+  .player { 
+    background:#1de9b6; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+  #stats { 
+    margin:15px; 
+    font-size:18px; 
+    font-weight:600;
+    color:#004d40;
+  }
+</style>
+</head>
+<body>
+<div id="gameWrapper">
+  
+  <h1>🌿 Eco Rescue Adventure 🌿</h1>
+  <div id="backButtonContainer" style="margin-bottom: 20px;">
+  <button id="backBtn" onclick="location.href='play.html'" 
+          style="
+            padding: 10px 25px; 
+            background-color: #00796b; 
+            color: #fff; 
+            border: none; 
+            border-radius: 12px; 
+            font-size: 1rem; 
+            cursor: pointer; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2); 
+            transition: background 0.3s, transform 0.2s;">
+    ⬅ Back to Play Page
+  </button>
+</div>
+
+  <div id="stats">🌱 Eco Points: <b id="ecoPoints">0</b> 💰 Coins: <b id="coins">50</b></div>
+  <div id="grid"></div>
+</div>
+
+<script>
+  const ecoActions = {
+    '💧': {eco:5, coins:-2}, // water clean
+    '🌳': {eco:10, coins:-5}, // plant tree
+    '🗑': {eco:8, coins:-3}, // clean trash
+    '🛢': {eco:-10, coins:10}, // polluted zone
+  };
+
+  const grid = document.getElementById("grid");
+  let ecoPoints=0, coins=50;
+  let playerPos = 12; // start middle
+  const cells = [];
+
+  for(let i=0;i<25;i++){
+    const cell = document.createElement("div");
+    cell.className="cell";
+    const rand = Math.random();
+    if(rand<0.2) cell.innerText='💧';
+    else if(rand<0.35) cell.innerText='🌳';
+    else if(rand<0.55) cell.innerText='🗑';
+    else if(rand<0.7) cell.innerText='🛢';
+    cells.push(cell);
+    grid.appendChild(cell);
+  }
+  cells[playerPos].classList.add("player");
+
+  function updateStats(){ 
+    document.getElementById("ecoPoints").innerText=ecoPoints; 
+    document.getElementById("coins").innerText=coins; 
+  }
+
+  function movePlayer(newPos){
+    if(newPos<0 || newPos>24) return;
+    cells[playerPos].classList.remove("player");
+    playerPos=newPos;
+    cells[playerPos].classList.add("player");
+    const action=cells[playerPos].innerText;
+    if(ecoActions[action]){
+      ecoPoints+=ecoActions[action].eco;
+      coins+=ecoActions[action].coins;
+      cells[playerPos].innerText='';
+      updateStats();
+    }
+  }
+
+  document.addEventListener("keydown",(e)=>{
+    if(e.key==="ArrowLeft" && playerPos%5>0) movePlayer(playerPos-1);
+    if(e.key==="ArrowRight" && playerPos%5<4) movePlayer(playerPos+1);
+    if(e.key==="ArrowUp" && playerPos-5>=0) movePlayer(playerPos-5);
+    if(e.key==="ArrowDown" && playerPos+5<=24) movePlayer(playerPos+5);
+  });
+</script>
+</body>
+</html>

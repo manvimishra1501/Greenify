@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Disaster Simulation Training</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Arial', sans-serif; }
+    .fade-in { animation: fadeIn 0.6s ease-in; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  </style>
+</head>
+<body class="bg-gray-100">
+
+<!-- Header -->
+<!-- Main Header -->
+<header class="bg-green-100 text-gray-900 px-8 py-3 flex items-center justify-between shadow-md">
+  
+  <!-- Left: Logo + App Name -->
+  <div class="flex items-center gap-3">
+    <img class="w-10 h-10" src="greenify.png" alt="Greenify Logo">
+    <a href="../Student/studash.html">
+      <h2 class="text-green-800 text-xl font-bold tracking-wide">GREENIFY</h2>
+    </a>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="hidden md:flex items-center gap-6 text-gray-700 font-medium">
+    <a class="hover:text-green-800 transition" href="../Student/studash.html">Dashboard</a>
+    <a class="text-green-900 font-semibold" href="../Student/play.html">Play</a>
+    <a class="hover:text-green-800 transition" href="../Student/compete.html">Compete</a>
+    <a class="hover:text-green-800 transition" href="../Common/communityHub.html">Community Hub</a>
+    <a class="hover:text-green-800 transition" href="../Student/leaderboard.html">Leaderboard</a>
+    <a class="hover:text-green-800 transition" href="../Common/avatars.html">Profile</a>
+  </nav>
+
+  <!-- Right: Score + Notifications + Profile -->
+  <div class="flex items-center gap-6">
+    <!-- Notifications -->
+    <a href="../../Common/notifications.html" class="material-icons text-gray-700 hover:text-green-700">notifications</a>
+
+    <!-- Profile Dropdown -->
+    <div class="relative">
+      <input type="checkbox" id="dropdownToggle" class="hidden peer">
+      <label for="dropdownToggle" class="flex items-center gap-2 cursor-pointer">
+        <div class="h-9 w-9 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300">
+          <span class="material-icons text-gray-600">person</span>
+        </div>
+      </label>
+      <div class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl z-10 p-2 hidden peer-checked:block">
+        <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-green-50 rounded-md"
+           href="../Common/avatars.html">
+          <span class="material-symbols-outlined text-base">face</span> Profile
+        </a>
+        <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-green-50 rounded-md"
+           href="../Student/MyCourses/climateChange.html">
+          <span class="material-symbols-outlined text-base">school</span> My Courses
+        </a>
+        <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-green-50 rounded-md"
+           href="../Student/MyAchievements.html">
+          <span class="material-symbols-outlined text-base">emoji_events</span> My Achievements
+        </a>
+        <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-green-50 rounded-md"
+           href="../Common/helpSupport.html">
+          <span class="material-symbols-outlined text-base">help</span> Help & Support
+        </a>
+        <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-green-50 rounded-md"
+           href="../Student/settings.html">
+          <span class="material-symbols-outlined text-base">settings</span> Settings
+        </a>
+        <div class="my-1 border-t border-gray-100"></div>
+        <a id="logoutButton" class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md" href="#">
+          <span class="material-symbols-outlined text-base">logout</span> Sign Out
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Sub-Header Banner -->
+<section class="bg-green-50 border-b border-green-200 text-center py-6 shadow-sm">
+  <h1 class="text-3xl font-extrabold text-green-800">🛡 Disaster Preparedness Training</h1>
+  <p id="scoreDisplay" class="mt-2 text-lg text-gray-700 font-semibold">Score: 0</p>
+</section>
+
+  <!-- Main Container -->
+  <main class="max-w-5xl mx-auto my-10 space-y-10">
+
+    <!-- Disaster Category Selection -->
+    <section id="disasterSelection" class="grid md:grid-cols-3 gap-6">
+      <div onclick="chooseDisaster('flood')" 
+           class="cursor-pointer bg-blue-100 hover:bg-blue-200 p-6 rounded-2xl shadow-lg text-center transition">
+        <img src="flood.jpg" class="w-full h-40 object-cover rounded-lg mb-3" alt="Flood">
+        <h2 class="text-2xl font-bold text-blue-700">🌊 Flood</h2>
+        <p class="text-gray-700 mt-2">Learn how to survive rising waters.</p>
+      </div>
+      <div onclick="chooseDisaster('earthquake')" 
+           class="cursor-pointer bg-red-100 hover:bg-red-200 p-6 rounded-2xl shadow-lg text-center transition">
+        <img src="earth.jpg" class="w-full h-40 object-cover rounded-lg mb-3" alt="Earthquake">
+        <h2 class="text-2xl font-bold text-red-700">🌍 Earthquake</h2>
+        <p class="text-gray-700 mt-2">Practice safe moves when the ground shakes.</p>
+      </div>
+      <div onclick="chooseDisaster('tornado')" 
+           class="cursor-pointer bg-purple-100 hover:bg-purple-200 p-6 rounded-2xl shadow-lg text-center transition">
+        <img src="tornado.jpg" class="w-full h-40 object-cover rounded-lg mb-3" alt="Tornado">
+        <h2 class="text-2xl font-bold text-purple-700">🌪 Tornado</h2>
+        <p class="text-gray-700 mt-2">Know where to hide when twisters strike.</p>
+      </div>
+    </section>
+
+    <!-- Scenario Training Section -->
+    <section id="trainingSection" class="hidden bg-white shadow-xl rounded-2xl p-6">
+
+      <!-- Progress -->
+      <div class="mb-4 flex justify-between items-center">
+        <div class="w-3/4 bg-gray-200 rounded-full h-4">
+          <div id="progressBar" class="bg-green-600 h-4 rounded-full" style="width: 0%"></div>
+        </div>
+        <button onclick="goBack()" class="ml-4 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">⬅ Go Back</button>
+      </div>
+      <p class="text-sm text-gray-600 mb-4" id="progressText">Scenario 0 of 0</p>
+
+      <!-- Scenario Image & Text -->
+      <div class="relative mb-6">
+        <img id="scenarioImage" src="https://via.placeholder.com/800x300" 
+             alt="Scenario" class="w-full h-64 object-cover rounded-xl">
+        <div id="scenarioOverlay" 
+             class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+          <h2 id="scenarioText" class="text-white text-2xl font-bold text-center px-6">
+            Choose a disaster to begin training!
+          </h2>
+        </div>
+      </div>
+
+      <!-- Options -->
+      <div id="optionsContainer" class="grid md:grid-cols-2 gap-4 hidden"></div>
+    </section>
+
+    <!-- Random Scenario Generator -->
+    <section class="bg-white shadow-xl rounded-2xl p-6 text-center">
+      <h2 class="text-2xl font-bold text-green-700 mb-4">🎲 Random Scenario Generator</h2>
+      <p class="text-lg mb-6">Test yourself! Read the situation and type what you’d do.</p>
+      
+      <button id="generateScenario" 
+              class="px-6 py-3 bg-green-600 text-white rounded-lg shadow-lg hover:bg-green-700 transition">
+        Generate Scenario
+      </button>
+
+      <div id="scenarioBox" class="mt-6 p-6 bg-gray-100 rounded-xl text-lg font-medium text-gray-700">
+        Click the button to get a random scenario!
+      </div>
+
+      <textarea id="userAnswer" rows="3" placeholder="Type your response here..." 
+                class="w-full mt-4 p-3 rounded-lg border border-gray-300"></textarea>
+      <button onclick="submitAnswer()" 
+              class="mt-3 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+        Submit Answer
+      </button>
+      <p id="answerFeedback" class="mt-3 text-gray-800 font-medium"></p>
+    </section>
+  </main>
+
+  <!-- Feedback Modal -->
+  <div id="feedbackModal" class="fixed inset-0 hidden bg-black bg-opacity-60 flex items-center justify-center">
+    <div class="bg-white rounded-2xl shadow-xl p-6 w-[90%] max-w-md text-center fade-in">
+      <h3 id="feedbackTitle" class="text-xl font-bold mb-2"></h3>
+      <p id="feedbackMessage" class="text-gray-700 mb-4"></p>
+      <button onclick="nextScenario()" 
+              class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition">
+        Next →
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Scenarios database (5 for each disaster)
+    const scenariosDB = {
+      flood: [
+        {
+          text: "🌊 Water is rising in your neighborhood fast!",
+          image: "flood.jpg",
+          options: [
+            { text: "Move to higher ground/upper floors", correct: true, feedback: "Correct! Always move up and away from water." },
+            { text: "Stay in basement", correct: false, feedback: "Wrong! Basements flood first and trap people." }
+          ]
+        },
+        {
+          text: "🌊 While evacuating, you see floodwaters ahead.",
+          image: "flood2.jpg",
+          options: [
+            { text: "Avoid driving into it", correct: true, feedback: "Correct! Even shallow water can sweep cars away." },
+            { text: "Drive through anyway", correct: false, feedback: "Wrong! Vehicles get stuck or swept away quickly." }
+          ]
+        },
+        {
+          text: "🌊 What should you carry during evacuation?",
+          image: "f1.jpg",
+          options: [
+            { text: "Emergency kit", correct: true, feedback: "Correct! Always keep essentials ready." },
+            { text: "Heavy luggage", correct: false, feedback: "Wrong! Extra baggage slows you down." }
+          ]
+        },
+        {
+          text: "🌊 What should you avoid touching during floods?",
+          image: "f2.jpg",
+          options: [
+            { text: "Electrical equipment", correct: true, feedback: "Correct! Electricity and water are deadly together." },
+            { text: "Food", correct: false, feedback: "Food is not the immediate danger here." }
+          ]
+        },
+        {
+          text: "🌊 Best place to move during floods?",
+          image: "https://i.imgur.com/5f6gL2C.jpg",
+          options: [
+            { text: "Higher ground", correct: true, feedback: "Correct! Always seek higher elevation." },
+            { text: "Near rivers", correct: false, feedback: "Wrong! Rivers swell fast in floods." }
+          ]
+        }
+      ],
+      earthquake: [
+        {
+          text: "🌍 Tremors start while you're indoors.",
+          image: "e1.jpg",
+          options: [
+            { text: "Drop, Cover & Hold under desk", correct: true, feedback: "Correct! Best protection indoors." },
+            { text: "Run outside immediately", correct: false, feedback: "Wrong! Falling debris outside is deadly." }
+          ]
+        },
+        {
+          text: "🌍 After shaking stops, what now?",
+          image: "e2.jpg",
+          options: [
+            { text: "Evacuate calmly & help injured", correct: true, feedback: "Correct! Safety first after shaking ends." },
+            { text: "Use elevator", correct: false, feedback: "Wrong! Elevators may trap you." }
+          ]
+        },
+        {
+          text: "🌍 Where should you avoid standing?",
+          image: "https://i.imgur.com/6f8QkB2.jpg",
+          options: [
+            { text: "Near glass windows", correct: true, feedback: "Correct! Glass shatters easily." },
+            { text: "Under a desk", correct: false, feedback: "That’s actually the safest place." }
+          ]
+        },
+        {
+          text: "🌍 What should you keep in an earthquake emergency kit?",
+          image: "e2.jpg",
+          options: [
+            { text: "Food & water", correct: true, feedback: "Correct! Essentials for survival." },
+            { text: "Glass items", correct: false, feedback: "Wrong! Fragile items are unsafe." }
+          ]
+        },
+        {
+          text: "🌍 What should you do if trapped under debris?",
+          image: "e1.jpg",
+          options: [
+            { text: "Tap on pipe/wall for rescuers", correct: true, feedback: "Correct! Noise helps rescuers locate you." },
+            { text: "Shout continuously", correct: false, feedback: "Wrong! Shouting wastes oxygen." }
+          ]
+        }
+      ],
+      tornado: [
+        {
+          text: "🌪 A tornado siren sounds nearby.",
+          image: "t1.jpg",
+          options: [
+            { text: "Go to basement/interior room", correct: true, feedback: "Correct! Safest place during tornadoes." },
+            { text: "Watch outside", correct: false, feedback: "Wrong! Flying debris kills more people than wind." }
+          ]
+        },
+        {
+          text: "🌪 You’re in a car when tornado approaches.",
+          image: "t2.jpg",
+          options: [
+            { text: "Leave car & find low ditch", correct: true, feedback: "Correct! Cars are unsafe in tornadoes." },
+            { text: "Stay inside car", correct: false, feedback: "Wrong! Vehicles are easily tossed by winds." }
+          ]
+        },
+        {
+          text: "🌪 Where should you avoid during tornadoes?",
+          image: "t3.jpg",
+          options: [
+            { text: "Near windows", correct: true, feedback: "Correct! Flying glass is deadly." },
+            { text: "Basement", correct: false, feedback: "Basements are safe, not dangerous." }
+          ]
+        },
+        {
+          text: "🌪 What is important to listen to during tornadoes?",
+          image: "t5.jpg",
+          options: [
+            { text: "Weather alerts", correct: true, feedback: "Correct! Stay updated with warnings." },
+            { text: "Music", correct: false, feedback: "Wrong! Entertainment won’t save you." }
+          ]
+        },
+        {
+          text: "🌪 Where should you NOT stay during tornado?",
+          image: "t4.jpg",
+          options: [
+            { text: "Car", correct: true, feedback: "Correct! Cars are very unsafe in tornadoes." },
+            { text: "Shelter", correct: false, feedback: "Shelters are actually the safest." }
+          ]
+        }
+      ]
+    };
+
+    let currentDisaster = null;
+    let currentScenario = -1;
+    let score = 0;
+
+    function chooseDisaster(disaster) {
+      currentDisaster = disaster;
+      currentScenario = -1;
+      score = 0;
+      document.getElementById("scoreDisplay").textContent = "Score: 0";
+      document.getElementById("disasterSelection").classList.add("hidden");
+      document.getElementById("trainingSection").classList.remove("hidden");
+      nextScenario();
+    }
+
+    function nextScenario() {
+      currentScenario++;
+      document.getElementById("feedbackModal").classList.add("hidden");
+
+      const scenarios = scenariosDB[currentDisaster];
+      if (currentScenario >= scenarios.length) {
+        document.getElementById("scenarioText").textContent = "🎉 Training Complete!";
+        document.getElementById("scenarioImage").src = "https://i.imgur.com/J6fWcM8.png";
+        document.getElementById("optionsContainer").classList.add("hidden");
+        document.getElementById("progressText").textContent = "All scenarios completed";
+        document.getElementById("progressBar").style.width = "100%";
+        return;
+      }
+
+      const s = scenarios[currentScenario];
+      document.getElementById("scenarioText").textContent = s.text;
+      document.getElementById("scenarioImage").src = s.image;
+      document.getElementById("progressText").textContent = `Scenario ${currentScenario+1} of ${scenarios.length}`;
+      document.getElementById("progressBar").style.width = `${((currentScenario+1)/scenarios.length)*100}%`;
+
+      const container = document.getElementById("optionsContainer");
+      container.innerHTML = "";
+      container.classList.remove("hidden");
+
+      s.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.textContent = option.text;
+        btn.className = "bg-gray-100 hover:bg-gray-200 px-4 py-3 rounded-xl text-lg font-medium transition";
+        btn.onclick = () => {
+          showFeedback(option.correct, option.feedback);
+          if (option.correct) score += 10;
+          document.getElementById("scoreDisplay").textContent = `Score: ${score}`;
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function showFeedback(correct, message) {
+      document.getElementById("feedbackTitle").textContent = correct ? "✅ Correct!" : "❌ Wrong!";
+      document.getElementById("feedbackMessage").textContent = message;
+      document.getElementById("feedbackModal").classList.remove("hidden");
+    }
+
+    function goBack() {
+      document.getElementById("trainingSection").classList.add("hidden");
+      document.getElementById("disasterSelection").classList.remove("hidden");
+    }
+
+    // Random Scenario Generator
+    const randomScenarios = [
+      "🌊 Flooding starts while you’re at work — what’s your first move?",
+      "🌍 Earthquake hits while you’re in the library — what do you do?",
+      "🌪 Tornado warning in your area — where do you go?",
+      "🔥 Kitchen fire spreads suddenly — how do you react?"
+    ];
+
+    function submitAnswer() {
+      const answer = document.getElementById("userAnswer").value.trim();
+      if (!answer) {
+        document.getElementById("answerFeedback").textContent = "⚠ Please type your response before submitting.";
+        return;
+      }
+      document.getElementById("answerFeedback").textContent = `✅ Your response recorded: "${answer}"`;
+    }
+
+    document.getElementById("generateScenario").addEventListener("click", () => {
+      const randomScenario = randomScenarios[Math.floor(Math.random() * randomScenarios.length)];
+      document.getElementById("scenarioBox").innerText = randomScenario;
+      document.getElementById("userAnswer").value = "";
+      document.getElementById("answerFeedback").textContent = "";
+    });
+  </script>
+</body>
+</html>

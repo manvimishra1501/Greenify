@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Recycle Sorting Mini-Game</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body {
+    background: linear-gradient(to bottom, #d9f0e3, #e0f7fa);
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+    padding: 2rem;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 3rem;
+    font-weight: 800;
+    color: #16a34a;
+    margin-bottom: 2rem;
+    text-shadow: 2px 2px #a7f3d0;
+  }
+
+  #score-board {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #065f46;
+  }
+
+  #result {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+  }
+
+  #game-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: auto;
+  }
+
+  .bin {
+    width: 180px;
+    height: 200px;
+    background: linear-gradient(145deg, #22c55e, #16a34a);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .bin:hover {
+    transform: scale(1.05) rotateY(5deg);
+    box-shadow: 0 20px 30px rgba(0,0,0,0.35);
+  }
+
+  #items-container {
+    margin-top: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    min-height: 300px;
+    position: relative;
+  }
+
+  .item {
+    width: 100px;
+    height: 60px;
+    background: linear-gradient(to right, #86efac, #22c55e);
+    color: #064e3b;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    cursor: grab;
+    position: absolute;
+    user-select: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
+  }
+
+  .item:active {
+    transform: scale(1.1) rotate(-3deg);
+  }
+</style>
+</head>
+<body>
+<h1>♻️ Recycle Sorting Game</h1>
+<div id="score-board">Score: 0</div>
+<div id="result"></div>
+
+<div id="game-container">
+  <div class="bin" data-type="Plastic">Plastic</div>
+  <div class="bin" data-type="Paper">Paper</div>
+  <div class="bin" data-type="Glass">Glass</div>
+  <div class="bin" data-type="Organic">Organic</div>
+  <div class="bin" data-type="Metal">Metal</div>
+</div>
+
+<div id="items-container"></div>
+
+<script>
+  const itemsContainer = document.getElementById("items-container");
+  const bins = document.querySelectorAll(".bin");
+  const scoreBoard = document.getElementById("score-board");
+  const resultEl = document.getElementById("result");
+  let score = 0;
+
+  const items = [
+    {name: "Bottle", type: "Plastic"},
+    {name: "Bag", type: "Plastic"},
+    {name: "Newspaper", type: "Paper"},
+    {name: "Box", type: "Paper"},
+    {name: "Jar", type: "Glass"},
+    {name: "Glass Cup", type: "Glass"},
+    {name: "Apple Core", type: "Organic"},
+    {name: "Banana Peel", type: "Organic"},
+    {name: "Can", type: "Metal"},
+    {name: "Tin", type: "Metal"}
+  ];
+
+  function createItems() {
+    itemsContainer.innerHTML = "";
+    let shuffled = [...items].sort(()=>Math.random()-0.5).slice(0,8);
+    shuffled.forEach(item => {
+      const div = document.createElement("div");
+      div.classList.add("item");
+      div.dataset.type = item.type;
+      div.textContent = item.name;
+      div.style.top = Math.random()*200 + "px";
+      div.style.left = Math.random()*600 + "px";
+
+      div.draggable = true;
+
+      div.addEventListener("dragstart", (e)=>{
+        e.dataTransfer.setData("type", item.type);
+        e.dataTransfer.setData("name", item.name);
+      });
+
+      itemsContainer.appendChild(div);
+    });
+  }
+
+  bins.forEach(bin=>{
+    bin.addEventListener("dragover", e=> e.preventDefault());
+    bin.addEventListener("drop", e=>{
+      const type = e.dataTransfer.getData("type");
+      const name = e.dataTransfer.getData("name");
+
+      if(bin.dataset.type === type){
+        score += 10;
+        resultEl.textContent = `✅ Correct! ${name} goes to ${type}`;
+        resultEl.style.color = "#16a34a";
+      } else {
+        score -= 5;
+        resultEl.textContent = `❌ Wrong! ${name} doesn't belong in ${bin.dataset.type}`;
+        resultEl.style.color = "#dc2626";
+      }
+
+      scoreBoard.textContent = "Score: " + score;
+
+      const itemEl = [...itemsContainer.children].find(child=>child.dataset.type===type && child.textContent===name);
+      if(itemEl) itemEl.remove();
+
+      if(itemsContainer.children.length===0) createItems();
+    });
+  });
+
+  createItems();
+</script>
+</body>
+</html>

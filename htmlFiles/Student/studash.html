@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect" />
+  <link as="style"
+    href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Spline+Sans%3Awght%40400%3B500%3B700"
+    onload="this.rel='stylesheet'" rel="stylesheet" />
+  <link as="style"
+    href="https://fonts.googleapis.com/css2?display=swap&family=Noto+Sans:wght@400;500;700;900&family=Spline+Sans:wght@400;500;700"
+    onload="this.rel='stylesheet'" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <title>Dashboard</title>
+  <link rel="shortcut icon" href="greenify.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link href="data:image/x-icon;base64," rel="icon" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script type="module" src="../../jsFiles/logout.js"></script>
+  <style>
+  :root {
+    --primary-50: #f0fdf6;
+    --primary-100: #dcfce9;
+    --primary-200: #bbf7d4;
+    --primary-300: #86efb5;
+    --primary-400: #4ade8f;
+    --primary-500: #20df6c;
+    --primary-600: #16a34a;
+    --primary-700: #15803d;
+    --primary-800: #166534;
+    --primary-900: #14532d;
+  }
+
+  body {
+    background-color: var(--primary-50);
+    color: #111811;
+  }
+
+  h1, h2, h3, h4 {
+    color: var(--primary-700);
+  }
+
+  /* 3D Simulation Modal */
+  #simulationModal .bg-white {
+    background-color: white;
+    border-radius: 1rem;
+    border: 2px solid var(--primary-200);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  }
+
+  #simulationModal h2 {
+    color: var(--primary-600);
+  }
+
+  #simulationModal a {
+    background: linear-gradient(to right, var(--primary-400), var(--primary-500));
+    color: white !important;
+  }
+
+  #simulationModal button {
+    background-color: var(--primary-500);
+    color: white;
+  }
+
+  /* Big Banner Button */
+  section > div > div.absolute > button {
+    background-color: var(--primary-500);
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    transition: transform 0.3s;
+  }
+  section > div > div.absolute > button:hover {
+    transform: scale(1.05);
+    background-color: var(--primary-600);
+  }
+
+  /* Table Styling */
+  table {
+    background-color: white;
+    border: 1px solid var(--primary-200);
+    border-radius: 0.75rem;
+  }
+
+  table th {
+    background-color: var(--primary-100);
+    color: var(--primary-700);
+    font-weight: bold;
+  }
+
+  table td {
+    color: var(--primary-700);
+  }
+
+  table tr:nth-child(even) {
+    background-color: var(--primary-50);
+  }
+
+  /* Cards (Assignments / Resources) */
+  .flex-1 {
+    background-color: var(--primary-50);
+    transition: background-color 0.3s;
+  }
+  .flex-1:hover {
+    background-color: var(--primary-100);
+  }
+  .flex-1 a {
+    background-color: var(--primary-200);
+    color: var(--primary-700);
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+  .flex-1 a:hover {
+    background-color: var(--primary-300);
+  }
+
+
+
+  
+  /* Chatbot Section */
+  section.bg-white {
+    border: 4px solid var(--primary-400);
+  }
+
+  /* Community Discussions */
+  .card-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      padding: 10px 20px 50px;
+    }
+
+    .card {
+      background-color: #fff;
+      border-radius: 20px;
+      padding: 20px;
+      width: 260px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+      text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: rotateX(5deg) rotateY(5deg) translateY(-5px);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.3);
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 16px;
+      margin-bottom: 12px;
+    }
+  /* Tabs */
+  #tab-discussions:checked ~ .mt-6 #content-discussions,
+  #tab-news:checked ~ .mt-6 #content-news,
+  #tab-projects:checked ~ .mt-6 #content-projects {
+    display: block;
+  }
+
+  /* Scrollbar cleanup for carousels */
+  .overflow-y-auto {
+    scrollbar-width: none;
+  }
+  .overflow-y-auto::-webkit-scrollbar {
+    display: none;
+  }
+</style>
+
+</head>
+
+<body class="bg-gray-50">
+  <div class="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden"
+    style='font-family: "Spline Sans", "Noto Sans", sans-serif;'>
+    <div class="layout-container flex h-full grow flex-col">
+      <header
+        class="flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 px-10 py-3">
+        </a>
+        <div class="flex items-center gap-4 text-gray-900">
+          <div class="text-green-500">
+            <img class="w-10" src="greenify.png" alt="">
+          </div>
+          <div class="flex items-center gap-4 text-[#111811]">
+            <div class="size-8">
+              <img src="../../greenify.png" alt="Gamification Icon"
+                class="w-full h-full object-contain" />
+            </div>
+            <a href="../Student/studash.html"> <h2 class="text-[#111811] text-lg font-bold leading-tight tracking-[-0.015em]">GREENIFY</h2></a>
+          </div>
+        </div>
+        <div class="flex items-center gap-8 text-gray-700 font-medium">
+          <a class="text-gray-900 font-semibold " href="../Student/studash.html">Dashboard</a>
+          <a class="hover:text-gray-900 transition-colors" href="../Student/play.html">Play</a>
+          <a class="hover:text-gray-900 transition-colors" href="../Student/compete.html">Compete</a>
+          <a class="hover:text-gray-900 transition-colors" href="../Common/communityHub.html">Community Hub</a>
+          <a class="hover:text-gray-900 transition-colors" href="../Student/leaderboard.html">Leaderboard</a>
+          <a class="hover:text-green-800 transition" href="../Common/avatars.html">Profile</a>
+        </div>
+
+        <div class="flex items-center space-x-4 relative">
+          <a href="htmlFiles/../../Common/notifications.html" class="material-icons text-gray-600">notifications</a>
+          <div class="relative">
+            <!-- hidden checkbox acts as toggle -->
+            <input type="checkbox" id="dropdownToggle" class="hidden peer">
+
+            <!-- button (label for checkbox) -->
+            <label for="dropdownToggle" class="flex items-center gap-2 cursor-pointer">
+              <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300">
+                <span class="material-icons text-gray-500">person</span>
+              </div>
+
+            </label>
+
+            <!-- dropdown menu -->
+            <div class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl z-10 p-2 hidden peer-checked:block">
+              <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                href="../Common/avatars.html">
+                <span class="material-symbols-outlined text-base">face</span>
+                Profile
+              </a>
+              <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                href="./MyCourses/learn.html">
+                <span class="material-symbols-outlined text-base">school</span>
+                My Courses
+              </a>
+              <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                href="MyAchievements.html">
+                <span class="material-symbols-outlined text-base">emoji_events</span>
+                My Achievements
+              </a>
+              <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                href="htmFiles/../../Common/helpSupport.html">
+                <span class="material-symbols-outlined text-base">help</span>
+                Help & Support
+              </a>
+              <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                href="settings.html">
+                <span class="material-symbols-outlined text-base">settings</span>
+                Settings
+              </a>
+              <div class="my-1 border-t border-gray-100"></div>
+              <a id="logoutButton" class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md" href="">
+                <span class="material-symbols-outlined text-base">logout</span>
+                Sign Out
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+
+      
+      <div class="px-40 flex flex-1 justify-center py-5">
+        <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+ <h1 class="text-[32px] font-bold">
+  Welcome <span id="welcomeUser"></span>!
+</h1>
+
+   <!-- 3D Simulation World Modal -->
+<div id="simulationModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
+  <div class="relative bg-white rounded-2xl overflow-hidden shadow-2xl w-[90%] max-w-4xl">
+    
+    <!-- Background Banner -->
+    <div class="h-56 bg-cover bg-center" 
+         style="background-image: url('proto.jpg');">
+    </div>
+
+    <!-- Content Tab -->
+    <div class="p-8 text-center">
+      <h2 class="text-3xl font-bold text-gray-800 mb-4">Step Into the 3D Simulation World 🌍</h2>
+      <p class="text-gray-600 mb-6">
+        Experience an immersive journey where learning meets exploration.
+      </p>
+      <a href="https://drive.google.com/file/d/1R8nqGYf0Jq5u0qwv0_NbJBbdyHXUXdQb/view?usp=drive_link" target="_blank"
+         class="inline-block bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold px-8 py-4 rounded-lg shadow-lg hover:scale-105 transition-transform duration-300">
+        Let’s Go →
+      </a>
+    </div>
+
+    <!-- Close Button -->
+    <button onclick="hideSimulationModal()" 
+            class="absolute top-3 right-3 text-white bg-black bg-opacity-40 hover:bg-opacity-70 rounded-full w-10 h-10 flex items-center justify-center text-xl">
+      ✖
+    </button>
+  </div>
+</div>
+
+<script>
+  function showSimulationModal() {
+    document.getElementById("simulationModal").classList.remove("hidden");
+  }
+
+  function hideSimulationModal() {
+    document.getElementById("simulationModal").classList.add("hidden");
+  }
+</script>
+<!-- Big Banner Button for 3D World -->
+<section class="my-16 flex justify-center">
+  <div class="relative w-[90%] max-w-5xl rounded-2xl overflow-hidden shadow-2xl">
+    
+    <!-- Background Image -->
+    <img src="proto.jpg" 
+         alt="3D World Banner" 
+         class="w-full h-64 object-cover">
+
+    <!-- Dark Overlay -->
+    <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+      
+      <!-- Big Button -->
+      <button onclick="showSimulationModal()" 
+              class="text-3xl md:text-4xl font-bold text-white bg-green-600 bg-opacity-80 px-10 py-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
+        🌍 Let’s Go to the 3D Simulation World
+      </button>
+    </div>
+  </div>
+</section>
+
+
+
+          <p class="text-[#0d141b] text-base font-normal leading-normal pb-3 pt-1 px-4">Explore new challenges and
+            continue your eco-journey.</p>
+          <h2 class="text-[#0d141b] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">My Progress
+          </h2>
+<!-- Progress Section -->
+<div class="flex flex-col gap-3 p-4">
+  <!-- Title + Progress Bar -->
+  <div class="flex gap-6 justify-between items-center">
+    <p class="text-[#0d141b] text-base font-medium leading-normal">Learning Path</p>
+  </div>
+  <div class="rounded bg-[#cfdbe7] h-3 w-full overflow-hidden">
+    <div class="h-3 rounded bg-[#1380ec]" style="width: 60%;"></div>
+  </div>
+  <p class="text-[#4c739a] text-sm font-normal leading-normal">60% Complete</p>
+</div>
+
+<!-- Table Layout -->
+<div class="p-4">
+  <div class="overflow-x-auto">
+    <table class="w-full border border-[#cfdbe7] rounded-xl overflow-hidden bg-white text-left">
+      <thead class="bg-[#f1f5f9]">
+        <tr>
+          <th class="px-6 py-3 text-[#0d141b] font-semibold">Metric</th>
+          <th class="px-6 py-3 text-[#0d141b] font-semibold">Value</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-[#e2e8f0]">
+        <tr>
+          <td class="px-6 py-3">Challenges Completed</td>
+          <td class="px-6 py-3 font-bold">5</td>
+        </tr>
+        <tr>
+          <td class="px-6 py-3">Points Earned</td>
+          <td class="px-6 py-3 font-bold">250</td>
+        </tr>
+        <tr>
+          <td class="px-6 py-3">Checkpoints Fulfilled</td>
+          <td class="px-6 py-3 font-bold">8 / 12</td>
+        </tr>
+        <tr>
+          <td class="px-6 py-3">Mini Challenges</td>
+          <td class="px-6 py-3 font-bold">3</td>
+        </tr>
+        <tr>
+          <td class="px-6 py-3">Topics Mastered</td>
+          <td class="px-6 py-3">
+            <details>
+              <summary class="cursor-pointer font-medium text-[#1380ec]">View List</summary>
+              <ul class="list-disc pl-5 text-sm text-[#4c739a] mt-2">
+                <li>Climate Basics</li>
+                <li>Sustainable Energy</li>
+                <li>Water Conservation</li>
+              </ul>
+            </details>
+          </td>
+        </tr>
+        <tr>
+          <td class="px-6 py-3">Topics To Work On</td>
+          <td class="px-6 py-3">
+            <details>
+              <summary class="cursor-pointer font-medium text-[#1380ec]">View List</summary>
+              <ul class="list-disc pl-5 text-sm text-[#4c739a] mt-2">
+                <li>Waste Management</li>
+                <li>Carbon Footprint</li>
+                <li>Eco-friendly Transport</li>
+              </ul>
+            </details>
+          </td>
+        </tr>
+        <tr>
+          <td class="px-6 py-3">Overall Progress</td>
+          <td class="px-6 py-3">
+            <div class="rounded bg-[#cfdbe7] h-2 w-full overflow-hidden">
+              <div class="h-2 rounded bg-[#16a34a]" style="width: 75%;"></div>
+            </div>
+            <p class="text-[#4c739a] text-sm mt-1">75% Achieved</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Carbon Footprint Tracker Snippet -->
+<div class="tracker-container">
+  <h2>🌱 Carbon Footprint Tracker</h2>
+  <p>Estimate your daily carbon footprint based on travel, electricity, and diet.</p>
+
+  <label for="car">Daily car travel (km):</label>
+  <input type="number" id="car" placeholder="e.g., 20" min="0">
+
+  <label for="electricity">Daily electricity usage (kWh):</label>
+  <input type="number" id="electricity" placeholder="e.g., 5" min="0">
+
+  <label for="diet">Diet type:</label>
+  <select id="diet">
+    <option value="meat">Meat-heavy</option>
+    <option value="mixed">Mixed diet</option>
+    <option value="vegetarian">Vegetarian</option>
+    <option value="vegan">Vegan</option>
+  </select>
+
+  <div class="button-group">
+    <button id="calculateBtn">Calculate Footprint</button>
+    <button id="resetBtn">Restart</button>
+  </div>
+
+  <div class="result" id="result"></div>
+</div>
+
+<style>
+  /* Container */
+  .tracker-container {
+    max-width: 500px;
+    background-color: #ffffff;
+    padding: 25px 30px;
+    margin: 30px auto;
+    border-radius: 1rem;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    text-align: center;
+    font-family: 'Noto Sans', sans-serif;
+    color: #14532d;
+  }
+
+  h2 {
+    margin-bottom: 10px;
+    font-size: 1.8rem;
+    color: #15803d;
+  }
+
+  p {
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+    color: #166534;
+  }
+
+  label {
+    display: block;
+    margin: 15px 0 5px;
+    font-weight: 600;
+  }
+
+  input, select {
+    width: 85%;
+    padding: 10px;
+    border-radius: 0.5rem;
+    border: 1px solid #bbf7d4;
+    margin-bottom: 10px;
+    font-size: 1rem;
+  }
+
+  .button-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+  }
+
+  button {
+    background-color: #22c55e;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.95rem;
+    transition: transform 0.3s, background-color 0.3s;
+  }
+
+  button:hover {
+    background-color: #15803d;
+    transform: scale(1.05);
+  }
+
+  .result {
+    margin-top: 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #14532d;
+  }
+
+  .result span {
+    color: #15803d;
+    font-weight: bold;
+  }
+</style>
+
+<script>
+  const calculateBtn = document.getElementById('calculateBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const resultDiv = document.getElementById('result');
+
+  calculateBtn.addEventListener('click', () => {
+    const carKm = parseFloat(document.getElementById('car').value) || 0;
+    const electricityKwh = parseFloat(document.getElementById('electricity').value) || 0;
+    const diet = document.getElementById('diet').value;
+
+    // More realistic carbon emission factors
+    const carFactor = 0.192; // kg CO2 per km (average car)
+    const electricityFactor = 0.475; // kg CO2 per kWh (average grid)
+    let dietFactor;
+
+    switch(diet) {
+      case 'meat': dietFactor = 7.2; break;       // kg CO2/day
+      case 'mixed': dietFactor = 5.0; break;
+      case 'vegetarian': dietFactor = 3.8; break;
+      case 'vegan': dietFactor = 2.5; break;
+      default: dietFactor = 5.0;
+    }
+
+    const carEmissions = carKm * carFactor;
+    const electricityEmissions = electricityKwh * electricityFactor;
+    const total = (carEmissions + electricityEmissions + dietFactor).toFixed(2);
+
+    let message;
+    if(total < 5){
+      message = "Excellent! Your footprint is very low 🌿";
+    } else if(total < 15){
+      message = "Moderate footprint, try reducing energy usage 🚴‍♂️";
+    } else {
+      message = "High footprint! Consider lifestyle changes ⚠️";
+    }
+
+    resultDiv.innerHTML = `Your estimated daily carbon footprint is <span>${total} kg CO₂</span>.<br>${message}`;
+  });
+
+  resetBtn.addEventListener('click', () => {
+    document.getElementById('car').value = '';
+    document.getElementById('electricity').value = '';
+    document.getElementById('diet').selectedIndex = 0;
+    resultDiv.innerHTML = '';
+  });
+</script>
+
+
+
+<h2 class="text-[#0d141b] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Latest Assignments</h2>
+<div class="flex overflow-y-auto [-ms-scrollbar-style:none] [scrollbar-width:none] [&amp;::-webkit-scrollbar]:hidden">
+  <div class="flex items-stretch p-4 gap-3">
+    <!-- Assignment 1 -->
+    <div class="flex h-full flex-1 flex-col gap-4 rounded-xl bg-slate-50 shadow-[0_0_4px_rgba(0,0,0,0.1)] min-w-40">
+      <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl flex flex-col"
+        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBc7n97fiwk2DllTStEg6L9ssla4SCUvVck1PEUlBBkSnbBL4f2M0ofr47qUfyzrG_ypXC7wB9P1qFtbZCkBSSUUePwlOUASaZ5XcH3mvcAxZuuw_iD7D5BYuRAoU6VZZgUaPHiDs16JIYrtrfXqaXtftePd_DwNzPqNwB0MRo0img3UuGt5haSfIb0BZh_cE4_ZsDOjwyk87NYDoFGBpjXchKwPKljCBI_cW49ottmrY6pL2qWFc1wT8FlGbScrA8EYqPp-wtcTIE");'>
+      </div>
+      <div class="flex flex-col flex-1 justify-between p-4 pt-0 gap-4">
+        <div>
+          <p class="text-[#0d141b] text-base font-medium leading-normal">Recycling Basics</p>
+          <p class="text-[#4c739a] text-sm font-normal leading-normal">Learn how to recycle effectively.</p>
+        </div>
+        <!-- Download PDF button -->
+        <a href="assignments/recycling_basics.pdf" download
+          class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#e7edf3] text-[#0d141b] text-sm font-bold leading-normal tracking-[0.015em]">
+          <span class="truncate">Download PDF</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Assignment 2 -->
+    <div class="flex h-full flex-1 flex-col gap-4 rounded-xl bg-slate-50 shadow-[0_0_4px_rgba(0,0,0,0.1)] min-w-40">
+      <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl flex flex-col"
+        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB0bGJJQt34u9DLt7f0dozeTF98-YSS1O2sj1ll2aqlm5kRek1X1wEj6xqMPw51HQlA3_OJhyMUnCfpoHfzkCGDLAwxEQlWs2vP3UiTII3z7hDzfAJuKrs0J6qdXNTf5Hz7YicbOM2s4u1IOQbsP51U3FtbmmXg5vwxlSUKsze0nllumTmhSwJ58SPwD1DTG2hwmAx4d2HM19WrW0cqNYVseVSwla5KfqahL7Z-syRwZK09xro721CDxan30gxspF9IUxjdv7lZAms");'>
+      </div>
+      <div class="flex flex-col flex-1 justify-between p-4 pt-0 gap-4">
+        <div>
+          <p class="text-[#0d141b] text-base font-medium leading-normal">Water Conservation</p>
+          <p class="text-[#4c739a] text-sm font-normal leading-normal">Discover ways to save water.</p>
+        </div>
+        <a href="assignments/water_conservation.pdf" download
+          class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#e7edf3] text-[#0d141b] text-sm font-bold leading-normal tracking-[0.015em]">
+          <span class="truncate">Download PDF</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Assignment 3 -->
+    <div class="flex h-full flex-1 flex-col gap-4 rounded-xl bg-slate-50 shadow-[0_0_4px_rgba(0,0,0,0.1)] min-w-40">
+      <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl flex flex-col"
+        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCd7WrFr9soPW4WPrcYRiOM4xMnonQXilzH8fIL659TZ2gBS2H84rNY2bOupLxuS6MsNSzJKN-UeTzIWriGbM3b2vlH28qYimH4uUwSkUYN01-RQQTrtJMbDOi1ruXzG_43_gOv8hiZFBrrXV_nkKTWM2dKfPFkUhaREX0twk3JNaklK5Oo3nrJOZHoEJlCjZYPrCuu9EaskBao1p6GnEadTp3lOLhN3m__2Yx9kNptiuiVdh1UE3GUbKZTH8mAVlAa-ebVMrSTY6Q");'>
+      </div>
+      <div class="flex flex-col flex-1 justify-between p-4 pt-0 gap-4">
+        <div>
+          <p class="text-[#0d141b] text-base font-medium leading-normal">Renewable Energy</p>
+          <p class="text-[#4c739a] text-sm font-normal leading-normal">Explore the world of renewable energy.</p>
+        </div>
+        <a href="assignments/renewable_energy.pdf" download
+          class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#e7edf3] text-[#0d141b] text-sm font-bold leading-normal tracking-[0.015em]">
+          <span class="truncate">Download PDF</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Chatbot Section -->
+<section class="my-16 px-6">
+  <div class="bg-white rounded-2xl shadow-2xl border-4 border-green-600 max-w-6xl mx-auto p-8">
+    
+    <!-- Heading -->
+    <h2 class="text-3xl font-extrabold text-green-700 mb-4 text-center">
+      🤖 Ask Your Questions with Our Chatbot
+    </h2>
+    <p class="text-base text-gray-600 mb-4 text-center">
+      Stuck on a topic? Have doubts? Get instant help with our AI-powered chatbot!
+    </p>
+
+   <!-- Chatbot Section -->
+<div class="w-full rounded-xl overflow-hidden shadow-lg border border-gray-300 relative h-96 md:h-[600px]">
+  <!-- BotPenguin widget -->
+   <zapier-interfaces-chatbot-embed is-popup='true' chatbot-id='cmg1xzx1g00201l5v69z5tp9w'
+   
+    class="absolute inset-0 w-full h-full">
+  </zapier-interfaces-chatbot-embed>
+</div>
+
+<!-- BotPenguin Script -->
+
+<script async type='module' src='https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js'></script>
+
+
+          <h2 class="text-[#0d141b] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Educational
+            Resources</h2>
+     <div
+  class="flex overflow-y-auto [-ms-scrollbar-style:none] [scrollbar-width:none] [&amp;::-webkit-scrollbar]:hidden">
+  <div class="flex items-stretch p-4 gap-3">
+
+    <!-- Assignment 1 -->
+    <div
+      class="flex h-full flex-1 flex-col gap-4 rounded-xl bg-slate-50 shadow-[0_0_4px_rgba(0,0,0,0.1)] min-w-40">
+      <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl flex flex-col"
+        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB-n9Jhjh2lbpUqedbS9oS2O5S1IVkbhKXVk_o57c1idLkGN9UHaktnNkUx1ypGABxXxTATlvgKnEgO3nFSH4YVxcI_AAvHeDdh-c6SGczvUP22UUhXKHS-MTtYGKxSjH5dM8JBOOiujggPgMAq2ie49c_6xcHLpOI0RykcIeAjl0Imw6zEHwEPP_VDwFCm6Z5sSiwwgo1V4Av0rwt84OlBbThLVXz1BGL7mf_3hZElZwzLJuGgUworQDCfcE9hhPTmGYb3q81WMEU");'>
+      </div>
+      <div class="flex flex-col flex-1 justify-between p-4 pt-0 gap-4">
+        <div>
+          <p class="text-[#0d141b] text-base font-medium leading-normal">Environmental Science</p>
+          <p class="text-[#4c739a] text-sm font-normal leading-normal">Understand the basics of environmental
+            science.</p>
+        </div>
+        <a href="https://www.nationalgeographic.org/encyclopedia/environmental-science/" target="_blank"
+          class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#e7edf3] text-[#0d141b] text-sm font-bold leading-normal tracking-[0.015em]">
+          <span class="truncate">View Resource</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Assignment 2 -->
+    <div
+      class="flex h-full flex-1 flex-col gap-4 rounded-xl bg-slate-50 shadow-[0_0_4px_rgba(0,0,0,0.1)] min-w-40">
+      <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl flex flex-col"
+        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBOvOO24Mxc1SBgvP-n9uDHU_ZYMU7vxZ1Zi14BFXc2d4ylGjymcFvUGrbPoyYxE_h0WZySE7SInQQrvh7rl2nDFvkDZIuWuBxqfVJccgZzwUb4PNHN0HFouJkGsFi7lnUOdx1f7cjimoS_tGIogMOTWjiSWvBF9loH7xAap3Q688DXdWuKxM024XzA6BwYP7G74HORhHCukefOaA9mGgVJDPLIqxuxY5l8EC6I9WhYtyV2IoAmJUefIVRNeX-WZBF2RYsJfNpHJD4");'>
+      </div>
+      <div class="flex flex-col flex-1 justify-between p-4 pt-0 gap-4">
+        <div>
+          <p class="text-[#0d141b] text-base font-medium leading-normal">Sustainable Agriculture</p>
+          <p class="text-[#4c739a] text-sm font-normal leading-normal">Learn about sustainable farming
+            practices.</p>
+        </div>
+        <a href="https://www.fao.org/sustainable-agriculture/en/" target="_blank"
+          class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#e7edf3] text-[#0d141b] text-sm font-bold leading-normal tracking-[0.015em]">
+          <span class="truncate">View Resource</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Assignment 3 -->
+    <div
+      class="flex h-full flex-1 flex-col gap-4 rounded-xl bg-slate-50 shadow-[0_0_4px_rgba(0,0,0,0.1)] min-w-40">
+      <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl flex flex-col"
+        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBfAb0q1qkRMkxjv87fOof6jrIxoIXK5rASQI9Haba6UgWeMpK23EP74SvqmIDIzEEl2uStlDwVEUVtGy-xL5oJVc-K21s9qVVCeP7WwqmU6vNvTKD_jS-0z7a27TbfcfkQ5TU7lihAWZPVB9QjC3y52wejngkuV5DxV7Tb34sVduZBW4bfyStpX6-SNkQ49UpuI4aaq2mpZaz0F3YF799sekIWWS6RgU34G7YJKyfdb36XpLPHQjZDFr_zBLp9tpUwxmZBjXcaJuE");'>
+      </div>
+      <div class="flex flex-col flex-1 justify-between p-4 pt-0 gap-4">
+        <div>
+          <p class="text-[#0d141b] text-base font-medium leading-normal">Climate Change</p>
+          <p class="text-[#4c739a] text-sm font-normal leading-normal">Explore the causes and effects of
+            climate change.</p>
+        </div>
+        <a href="https://climate.nasa.gov/" target="_blank"
+          class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#e7edf3] text-[#0d141b] text-sm font-bold leading-normal tracking-[0.015em]">
+          <span class="truncate">View Resource</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+          
+ <!-- ====== Community Feed ====== -->
+  <section class="community-feed">
+    <h3>Community Feed</h3>
+    <div class="card-row">
+      <div class="card">
+        <p>Anna posted a tree-planting update</p>
+        <a href="/community/post/1" class="download-btn">View Post</a>
+      </div>
+      <div class="card">
+        <p>Raj shared his eco-comic creation</p>
+        <a href="/community/post/2" class="download-btn">View Post</a>
+      </div>
+    </div>
+  </section>
+
+                
+          <div class="flex px-4 py-3 justify-end">
+            <button
+              class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#e7edf3] text-[#0d141b] text-sm font-bold leading-normal tracking-[0.015em]">
+              <span class="truncate">View More</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

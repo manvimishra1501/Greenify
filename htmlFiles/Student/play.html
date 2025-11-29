@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect" />
+  <link
+    as="style"
+    href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Spline+Sans%3Awght%40400%3B500%3B700"
+    onload="this.rel='stylesheet'" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <title>Compete</title>
+  <link rel="shortcut icon" href="greenify.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script type="module" src="../../jsFiles/logout.js"></script>
+  <style type="text/tailwindcss">
+    :root {
+      --primary-50: #f0fdf6;
+      --primary-100: #dcfce9;
+      --primary-200: #bbf7d4;
+      --primary-300: #86efb5;
+      --primary-400: #4ade8f;
+      --primary-500: #20df6c;
+      --primary-600: #16a34a;
+      --primary-700: #15803d;
+      --primary-800: #166534;
+      --primary-900: #14532d;
+      --primary-950: #052e16;
+    }
+
+    /* Show content when radio is checked */
+    #tab-discussions:checked~.mt-6 #content-discussions,
+    #tab-news:checked~.mt-6 #content-news,
+    #tab-projects:checked~.mt-6 #content-projects {
+      display: block;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 font-sans">
+  <div class="relative flex min-h-screen flex-col overflow-x-hidden">
+
+    <!-- Header -->
+    <header class="flex items-center justify-between border-b border-gray-200 px-10 py-3">
+      <div class="flex items-center gap-4 text-gray-900">
+        <img class="w-10" src="greenify.png" alt="">
+        <a href="../Student/studash.html" class="text-lg font-bold text-[#111811]">GREENIFY</a>
+      </div>
+      <nav class="flex items-center gap-8 text-gray-700 font-medium">
+        <a class="hover:text-gray-900 transition-colors" href="../Student/studash.html">Dashboard</a>
+        <a class="text-gray-900 font-semibold" href="">Play</a>
+        <a class="hover:text-gray-900 transition-colors" href="../Student/compete.html">Compete</a>
+        <a class="hover:text-gray-900 transition-colors" href="../Common/communityHub.html">Community Hub</a>
+        <a class="hover:text-gray-900 transition-colors" href="../Student/leaderboard.html">Leaderboard</a>
+        <a class="hover:text-green-800 transition" href="../Common/avatars.html">Profile</a>
+      </nav>
+      <div class="flex items-center space-x-4 relative">
+        <a href="../Common/notifications.html" class="material-icons text-gray-600">notifications</a>
+        <div class="relative">
+          <input type="checkbox" id="dropdownToggle" class="hidden peer">
+          <label for="dropdownToggle" class="flex items-center gap-2 cursor-pointer">
+            <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300">
+              <span class="material-icons text-gray-500">person</span>
+            </div>
+          </label>
+          <div
+            class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl z-10 p-2 hidden peer-checked:block">
+            <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+              href="../Common/avatars.html">
+              <span class="material-symbols-outlined text-base">face</span> Profile
+            </a>
+            <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+              href="../Student/MyCourses/climateChange.html">
+              <span class="material-symbols-outlined text-base">school</span> My Courses
+            </a>
+            <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+              href="../Student/MyAchievements.html">
+              <span class="material-symbols-outlined text-base">emoji_events</span> My Achievements
+            </a>
+            <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+              href="../Common/helpSupport.html">
+              <span class="material-symbols-outlined text-base">help</span> Help & Support
+            </a>
+            <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+              href="../Student/settings.html">
+              <span class="material-symbols-outlined text-base">settings</span> Settings
+            </a>
+            <div class="my-1 border-t border-gray-100"></div>
+            <a id="logoutButton"
+              class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md"
+              href="">
+              <span class="material-symbols-outlined text-base">logout</span> Sign Out
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 3D Simulation World Modal -->
+    <div id="simulationModal"
+      class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
+      <div class="relative bg-white rounded-2xl overflow-hidden shadow-2xl w-[90%] max-w-4xl">
+        <div class="h-56 bg-cover bg-center" style="background-image: url('proto.jpg');"></div>
+        <div class="p-8 text-center">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">Step Into the 3D Simulation World 🌍</h2>
+          <p class="text-gray-600 mb-6">
+            Experience an immersive journey where learning meets exploration.
+          </p>
+          <a href="https://drive.google.com/file/d/1R8nqGYf0Jq5u0qwv0_NbJBbdyHXUXdQb/view?usp=drive_link"
+            target="_blank"
+            class="inline-block bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold px-8 py-4 rounded-lg shadow-lg hover:scale-105 transition-transform duration-300">
+            Let’s Go →
+          </a>
+        </div>
+        <button onclick="hideSimulationModal()"
+          class="absolute top-3 right-3 text-white bg-black bg-opacity-40 hover:bg-opacity-70 rounded-full w-10 h-10 flex items-center justify-center text-xl">
+          ✖
+        </button>
+      </div>
+    </div>
+
+    <script>
+      function showSimulationModal() {
+        document.getElementById("simulationModal").classList.remove("hidden");
+      }
+
+      function hideSimulationModal() {
+        document.getElementById("simulationModal").classList.add("hidden");
+      }
+    </script>
+
+    <!-- Big Banner Cards Section -->
+    <main class="space-y-16 my-16 flex flex-col items-center">
+
+      <!-- 3D Simulation -->
+      <div class="relative w-[90%] max-w-5xl rounded-2xl overflow-hidden shadow-2xl">
+        <img src="proto.jpg" alt="3D World Banner" class="w-full h-64 object-cover block">
+        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <button onclick="showSimulationModal()"
+            class="text-3xl md:text-4xl font-bold text-white bg-green-600 bg-opacity-80 px-10 py-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
+            🌍 Let’s Go to the 3D Simulation World
+          </button>
+        </div>
+      </div>
+
+      <!-- Disaster Preparedness -->
+      <div class="relative w-[90%] max-w-5xl rounded-2xl overflow-hidden shadow-2xl">
+        <img src="mixedd.png" alt="Disaster Preparedness" class="w-full h-64 object-cover block">
+        <div class="absolute inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center text-center px-6">
+          <h2 class="text-3xl md:text-4xl font-bold text-white mb-3">🛡️ Disaster Preparedness</h2>
+          <p class="text-white text-lg md:text-xl mb-4">Flood & Earthquake Training, Random Scenario Generator – test
+            your survival skills!</p>
+          <a href="./disaster.html"
+            class="bg-green-600 bg-opacity-80 text-white font-semibold px-8 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
+            Start Training →
+          </a>
+        </div>
+      </div>
+
+      <!-- Eco Comic Maker -->
+      <div class="relative w-[90%] max-w-5xl rounded-2xl overflow-hidden shadow-2xl">
+        <img src="comic.jpg" alt="Eco Comic Maker" class="w-full h-64 object-cover block">
+        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+          <a href="./eco_comic.html"
+            class="text-3xl md:text-4xl font-bold text-white bg-green-600 bg-opacity-80 px-10 py-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
+            🎨 Create Your Eco Comic
+          </a>
+        </div>
+      </div>
+
+      <!-- Virtual Experiments -->
+      <div class="relative w-[90%] max-w-5xl rounded-2xl overflow-hidden shadow-2xl">
+        <img src="virtual.jpg" alt="Virtual Experiments" class="w-full h-64 object-cover block">
+        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+          <a href="./virtual_experiments.html"
+            class="text-3xl md:text-4xl font-bold text-white bg-green-600 bg-opacity-80 px-10 py-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
+            🔬 Explore Virtual Experiments
+          </a>
+        </div>
+      </div>
+
+      <!-- Adopt Endangered Animal -->
+      <div class="relative w-[90%] max-w-5xl rounded-2xl overflow-hidden shadow-2xl">
+        <img src="pet.jpg" alt="Adopt Endangered Animal" class="w-full h-64 object-cover block">
+        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+          <a href="./eco_pet.html"
+            class="text-3xl md:text-4xl font-bold text-white bg-green-600 bg-opacity-80 px-10 py-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
+            🐾 Adopt an Endangered Animal
+          </a>
+        </div>
+      </div>
+
+
+<div class="px-40 flex flex-1 justify-center py-5">
+  <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+    <div class="flex flex-wrap justify-between gap-3 p-4">
+      <div class="flex min-w-72 flex-col gap-3">
+        <p class="text-[#0e1a13] tracking-light text-[32px] font-bold leading-tight">
+          Mini Games and Quizzes
+        </p>
+        <p class="text-[#51946c] text-sm font-normal leading-normal">
+          Test your eco-knowledge and have fun with our interactive games and quizzes.
+        </p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-3 p-4">
+      <!-- Eco Warriors -->
+      <div class="flex flex-col gap-3 pb-3">
+        <a href="./save_the_forest_game2.html">
+          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
+               style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCFC4_Fos1U5dBfIIRUpDU9_n0se0mFHqlCKZVAh81Hj1Ki_fAzkfQeIuInl-eD4BXtuOEt3pzuqbqz2xD8H2woxIdNiT0EmIta_SujvQvACRqWjmn3w_jIabq9V9A5mametqU18EUHgIZ_YtgMik9xmuxZNnyeHCXEE2gziFKlAUyXTSxSkcAmpl72eXJ5P1-QCCmqIwtzwcU0KloCdCnPANt0oxlslx03x5S4pAlaDqlhZSLxLZxcVZbcHyEI3nadisCMFdYgeDs");'>
+          </div>
+          <div>
+            <p class="text-[#0e1a13] text-base font-medium leading-normal">Eco Warriors</p>
+            <p class="text-[#51946c] text-sm font-normal leading-normal">
+              A strategy game where you build and manage an eco-friendly city.
+            </p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Recycling Challenge -->
+      <div class="flex flex-col gap-3 pb-3">
+        <a href="./recycle_game1.html">
+          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
+               style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXu_cvlhTMJJh1opkFxiugY03LFzNdPvd9fZUalbi4iuvBJoZgxgkRZ8CKlQuIE41PBzSnIe68_26yn5VqFI7HkEM0yjl05U6UZlus7B6zEm28S78l47LPZT5tZAKxyMBvNFKggO63jvvmwdDNN14ffvJLj4a85LXCRlrbFhpfYV5ElcYLi2e-J5LVxbmHDAQ7HXzDCHCG50lAjIhftliuDH2EFfzH9ZC9VL5619G64qohLEVMxbI-DZjjj2wINLVOr0wY6UOAoN-wTU");'>
+          </div>
+          <div>
+            <p class="text-[#0e1a13] text-base font-medium leading-normal">Recycling Challenge</p>
+            <p class="text-[#51946c] text-sm font-normal leading-normal">
+              Learn about recycling through this interactive challenge.
+            </p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Water Conservation Quiz -->
+      <div class="flex flex-col gap-3 pb-3">
+        <a href="./water.html">
+          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
+               style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD0nteULvkbbtw7y_DM2dT2iI9cO8Ng4C7RfRpiHzClE_sytsiybKow3NgfVV5nBQDY15FpQRh3RmHCMbb9BHs_y13SKdAyCeSwqL3b_ciF6O8umwQ8YDMb6564PDpmDliiihicanc3AXUG79DJhrJlZHxwY_bEH1vGBK3fVgS_5IvUW2b38ulK_I_5DbT4tRCIaAn-q_uyDhSvgwypsz8SbYgbHciNjMB7KPStAdy0faeNeASXfyufqlixrMqQf9CLWLqgANKtCOA");'>
+          </div>
+          <div>
+            <p class="text-[#0e1a13] text-base font-medium leading-normal">Water Conservation Quiz</p>
+            <p class="text-[#51946c] text-sm font-normal leading-normal">
+              Test your knowledge on water conservation.
+            </p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Sustainable Catching Game -->
+      <div class="flex flex-col gap-3 pb-3">
+        <a href="./sustainable.html">
+          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
+               style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuApqj8ZFScU6qwqx4s-7dUnS71LaeRmBzG5HIK3KysYwEdd_Lu3TZ-4mY4GK03wTAWm218L0MqoUhm60ut5dWgz8vG5eZ_AllahhmiCntE5GzvpFK5CJtkLMyIQ7xumy-pP7Iwt247VY1oEjanBuBevTCBBVXkk9ucpWnIBVyD-Wz9UWyh8aAeEhhv6vs6w3oIAMkgZ4sNn79S9Zx8DWLgXXjLVlHa_ysrSDsZzIltjWdpgM7ksgScPH6xOsiQjKuvmV6hiOYDYC1Q");'>
+          </div>
+          <div>
+            <p class="text-[#0e1a13] text-base font-medium leading-normal">Sustainable Catching Game</p>
+            <p class="text-[#51946c] text-sm font-normal leading-normal">
+              Understand what's organic and what's polluting for the environment
+            </p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Element Creation Challenge -->
+      <div class="flex flex-col gap-3 pb-3">
+        <a href="https://littlealchemy2.com">
+          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
+               style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCejqd6xNqoyHRH4x2QXqhokuim3IxOArajNnSWrMcvjNRgiXPegTS5TdHM5rH2q89YeVWqK_7SDr6oj7YnqDaGhsi5bcY1gLB_ixL59ajTyyuxImvBx8FneG5lcOa__oTreMsZsvxqRFyWlO4MQ7X8IoEopGtGh3bxSiAOh1Fl7XW3cX-KRFqvGFe3ExBP1ytTXQlOM2PWYyZ6rkdkdJRU0olPg6LJUau4W6-NJHpwCeU0Wwl2aI219pyyE_i0tH-hyp5DYlV2sAo");'>
+          </div>
+          <div>
+            <p class="text-[#0e1a13] text-base font-medium leading-normal">Element Creation Challenge</p>
+            <p class="text-[#51946c] text-sm font-normal leading-normal">
+              Mix elements to create new ones, from air to planets.
+            </p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Energy Efficiency Quest -->
+      <div class="flex flex-col gap-3 pb-3">
+        <a href="./energy.html">
+          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
+               style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBwmQ3mQNenEXrYMNi-vN8WMounBGVFP-Pxj8VZ3DWI_0K2ZDKany0AtjUUSOBAN4PYT0YPm6HVXQximMMY078zjwMU8RYhlpmV3pmcjn2U0UFxhliPQraaVA3G7vdaAF1Qze3daNqNj-TNr-4Beqo4zmdPS6rXmCrRPfJDOny-TpdrM5TxrNEx_6veurPVIIdig751MxDBThqsRq9BLWYgWhZzEFRyAC-Zsi4OLLqa6s4Ocy7-A9CR2AmBGnsis3v3bOQCSIQvZh8");'>
+          </div>
+          <div>
+            <p class="text-[#0e1a13] text-base font-medium leading-normal">Energy Efficiency Quest</p>
+            <p class="text-[#51946c] text-sm font-normal leading-normal">
+              Discover ways to save energy in your daily life.
+            </p>
+          </div>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+    </div>
+  </div>
+</div>
+
+
+
+      
+    </main>
+  </div>
+</body>
+
+</html>

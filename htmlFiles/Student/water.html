@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Water Saver Challenge</title>
+<style>
+  body { margin:0; font-family:'Segoe UI', sans-serif; background:#e0f7fa; }
+  h1 { text-align:center; color:#01579b; margin:15px; }
+  #score { text-align:center; font-size:18px; margin:10px; font-weight:bold; color:#004d40; }
+  #game { 
+    position:relative; width:600px; height:400px; margin:20px auto; 
+    border-radius:15px; background:linear-gradient(180deg,#bbdefb,#e1f5fe); 
+    border:3px solid #004d40; overflow:hidden; box-shadow:0 5px 20px rgba(0,0,0,0.2);
+  }
+  .player { position:absolute; width:40px; height:40px; background:#0288d1; border-radius:50%; bottom:20px; left:280px; display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; font-size:20px; }
+  .hotspot { position:absolute; width:60px; height:60px; background:#ffca28; border-radius:10px; display:flex; justify-content:center; align-items:center; font-weight:bold; cursor:pointer; text-align:center; }
+  .question-box { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:white; border-radius:12px; padding:20px; display:none; width:350px; box-shadow:0 10px 25px rgba(0,0,0,0.3); }
+  .option { margin:10px 0; padding:10px; background:#004d40; color:white; border:none; border-radius:8px; cursor:pointer; width:100%; font-weight:bold; }
+  .option:hover { background:#00796b; }
+  #feedback { margin-top:10px; font-weight:bold; color:#004d40; }
+</style>
+</head>
+<body>
+<h1>💦 Water Saver Challenge 💦</h1>
+<div id="score">🌱 Eco Points: <b id="ecoPoints">0</b></div>
+<div id="game">
+  <div class="player" id="player">🧑‍🚀</div>
+  <div class="question-box" id="questionBox">
+    <div id="qText"></div>
+    <div id="options"></div>
+    <div id="feedback"></div>
+  </div>
+</div>
+
+<script>
+const game = document.getElementById('game');
+const player = document.getElementById('player');
+const ecoPointsEl = document.getElementById('ecoPoints');
+const questionBox = document.getElementById('questionBox');
+const qText = document.getElementById('qText');
+const optionsDiv = document.getElementById('options');
+const feedback = document.getElementById('feedback');
+
+let playerX = 280, playerY = 340;
+let ecoPoints = 0;
+let hotspots = [];
+const hotspotData = [
+  {q:"Turn off tap while?", options:["Brushing","Cooking"], answer:"Brushing"},
+  {q:"Water plants best time?", options:["Morning","Night"], answer:"Morning"},
+  {q:"Recycle water is called?", options:["Greywater","Rainwater"], answer:"Greywater"},
+  {q:"Fixing leaks saves?", options:["Water","Time"], answer:"Water"},
+  {q:"Collect rainwater in?", options:["Tank","Bowl"], answer:"Tank"},
+  {q:"Use less water when?", options:["Washing car","Cooking"], answer:"Washing car"},
+  {q:"Reduce water wastage by?", options:["Turn off tap","Leave running"], answer:"Turn off tap"},
+  {q:"Shower or bath uses less?", options:["Shower","Bath"], answer:"Shower"},
+  {q:"Watering garden efficiently?", options:["Drip irrigation","Sprinkler"], answer:"Drip irrigation"},
+  {q:"Polluted water affects?", options:["Health","Time"], answer:"Health"},
+  {q:"Water conservation symbol?", options:["💧","🔥"], answer:"💧"},
+  {q:"Boil water for safe?", options:["Drinking","Cleaning"], answer:"Drinking"},
+  {q:"Greywater can be used for?", options:["Plants","Drinking"], answer:"Plants"},
+  {q:"Fix leaking taps in?", options:["Homes","Roads"], answer:"Homes"},
+  {q:"Avoid wasting water while?", options:["Brushing","Sleeping"], answer:"Brushing"},
+  {q:"Collecting rainwater helps?", options:["Groundwater recharge","Air quality"], answer:"Groundwater recharge"},
+  {q:"Overwatering plants leads to?", options:["Water wastage","Growth"], answer:"Water wastage"},
+  {q:"Choose low-flow faucets?", options:["Yes","No"], answer:"Yes"},
+  {q:"Use bucket for car wash?", options:["Yes","No"], answer:"Yes"},
+  {q:"Turn off tap while washing?", options:["Hands","Car"], answer:"Hands"},
+  {q:"Water footprint means?", options:["Water used","Water wasted"], answer:"Water used"},
+  {q:"Reuse water from AC?", options:["Yes","No"], answer:"Yes"},
+  {q:"Avoid washing streets with hose?", options:["Yes","No"], answer:"Yes"},
+  {q:"Cover water tanks to avoid?", options:["Evaporation","Rain"], answer:"Evaporation"},
+  {q:"Check toilets for leaks?", options:["Yes","No"], answer:"Yes"},
+  {q:"Install water meters?", options:["Yes","No"], answer:"Yes"},
+  {q:"Reduce water in swimming pools?", options:["Yes","No"], answer:"Yes"},
+  {q:"Use water-efficient appliances?", options:["Yes","No"], answer:"Yes"},
+  {q:"Water lawns only when?", options:["Morning","Evening"], answer:"Morning"},
+  {q:"Avoid running taps during?", options:["Dishwashing","Cooking"], answer:"Dishwashing"}
+];
+
+document.addEventListener('keydown', e=>{
+  if(e.key==="ArrowLeft" && playerX>0) playerX -= 15;
+  if(e.key==="ArrowRight" && playerX<560) playerX += 15;
+  if(e.key==="ArrowUp" && playerY>0) playerY -= 15;
+  if(e.key==="ArrowDown" && playerY<360) playerY += 15;
+  player.style.left = playerX + 'px';
+  player.style.top = playerY + 'px';
+});
+
+function spawnHotspot(){
+  const hotspot = document.createElement('div');
+  hotspot.classList.add('hotspot');
+  hotspot.style.left = Math.random()*540 + 'px';
+  hotspot.style.top = Math.random()*340 + 'px';
+  const q = hotspotData[Math.floor(Math.random()*hotspotData.length)];
+  hotspot.dataset.question = q.q;
+  hotspot.dataset.options = q.options.join(' / ');
+  hotspot.dataset.answer = q.answer;
+  hotspot.innerText = "💧";
+  game.appendChild(hotspot);
+  hotspots.push(hotspot);
+}
+
+function checkCollision(){
+  hotspots.forEach(h=>{
+    const hRect = h.getBoundingClientRect();
+    const pRect = player.getBoundingClientRect();
+    if(!(hRect.right<pRect.left || hRect.left>pRect.right || hRect.bottom<pRect.top || hRect.top>pRect.bottom)){
+      showQuestion(h.dataset);
+      h.remove();
+      hotspots = hotspots.filter(x=>x!==h);
+    }
+  });
+}
+
+function showQuestion(data){
+  qText.innerText = data.question;
+  optionsDiv.innerHTML = '';
+  feedback.innerText = '';
+  questionBox.style.display = 'block';
+  data.options.split(' / ').forEach(opt=>{
+    const btn = document.createElement('button');
+    btn.classList.add('option');
+    btn.innerText = opt;
+    btn.addEventListener('click',()=>{
+      if(opt.toLowerCase() === data.answer.toLowerCase()){
+        feedback.innerText = "✅ Correct! +10 points";
+        ecoPoints +=10;
+      } else {
+        feedback.innerText = ❌ Wrong! -5 points. Correct: ${data.answer};
+        ecoPoints -=5;
+      }
+      ecoPointsEl.innerText = ecoPoints;
+      setTimeout(()=>{ questionBox.style.display='none'; },1200);
+    });
+    optionsDiv.appendChild(btn);
+  });
+}
+
+// spawn hotspot every 3 sec
+setInterval(spawnHotspot,3000);
+// check collision every 50ms
+setInterval(checkCollision,50);
+</script>
+</body>
+</html>
