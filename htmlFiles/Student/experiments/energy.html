@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conservation of Energy Simulation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .cloud {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: float linear infinite;
+    }
+    @keyframes float {
+      from { transform: translateX(-200px); }
+      to { transform: translateX(100vw); }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-sky-200 via-green-100 to-yellow-100 flex flex-col items-center p-6 overflow-x-hidden">
+  <!-- Sky with clouds -->
+  <div class="cloud w-24 h-12 top-10 left-0" style="animation-duration: 60s"></div>
+  <div class="cloud w-16 h-8 top-20 left-40" style="animation-duration: 90s"></div>
+  <div class="cloud w-20 h-10 top-32 left-80" style="animation-duration: 120s"></div>
+
+  <!-- Header -->
+  <header class="text-center mb-6 z-10">
+    <h1 class="text-4xl font-extrabold text-green-900 drop-shadow-lg">Conservation of Energy Simulation</h1>
+    <p class="text-lg text-gray-700">Visualize how potential energy converts into kinetic energy while keeping total energy constant</p>
+  </header>
+
+  <!-- Layout -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-6xl z-10">
+    <!-- Controls -->
+    <div class="bg-white/70 backdrop-blur-lg rounded-2xl shadow-2xl p-6">
+      <h2 class="text-2xl font-semibold text-green-800 mb-4">⚙ Controls</h2>
+      <label class="block mb-6">
+        <span class="font-medium text-gray-800">Height of Object (m)</span>
+        <input id="heightSlider" type="range" min="1" max="50" value="25" class="w-full accent-green-700">
+        <span id="heightValue" class="text-sm text-gray-600">25 m</span>
+      </label>
+      <label class="block mb-6">
+        <span class="font-medium text-gray-800">Mass of Object (kg)</span>
+        <input id="massSlider" type="range" min="1" max="100" value="50" class="w-full accent-green-700">
+        <span id="massValue" class="text-sm text-gray-600">50 kg</span>
+      </label>
+      <button id="dropBtn" class="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 shadow-md">Drop Object</button>
+      <button id="resetBtn" class="mt-4 ml-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 shadow-md">Reset</button>
+    </div>
+
+    <!-- Visualization -->
+    <div class="relative bg-white/80 backdrop-blur-lg rounded-2xl shadow-2xl p-6 flex flex-col items-center justify-center">
+      <h2 class="text-2xl font-semibold text-green-800 mb-4">🌍 Visualization</h2>
+      <div id="vizBox" class="relative w-full h-96 bg-gradient-to-t from-green-300 via-yellow-100 to-sky-200 rounded-xl overflow-hidden">
+        <!-- Object -->
+        <div id="object" class="absolute w-14 h-14 bg-blue-500 rounded-full shadow-xl flex items-center justify-center text-white font-bold">⚪</div>
+      </div>
+      <p id="energyInfo" class="mt-4 text-gray-700 font-medium">Potential Energy: 0 J | Kinetic Energy: 0 J</p>
+      <p id="energyNote" class="text-sm text-gray-500">(Total Mechanical Energy remains constant)</p>
+      <!-- Energy Bar -->
+      <div class="mt-4 w-full h-4 bg-gray-200 rounded-full overflow-hidden">
+        <div id="energyBar" class="h-full bg-green-500 transition-all duration-300" style="width:50%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activity Log -->
+  <div class="mt-8 bg-white/80 backdrop-blur-lg rounded-2xl shadow-2xl p-6 w-full max-w-4xl z-10">
+    <h2 class="text-2xl font-semibold text-green-800 mb-4">📖 Activity Log</h2>
+    <ul id="log" class="list-disc pl-6 text-gray-700 space-y-1 text-sm"></ul>
+  </div>
+
+  <!-- Back Button -->
+  <div class="mt-6 z-10">
+    <a href="../virtual_experiments.html" class="px-6 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-900 shadow-md">⬅ Back</a>
+  </div>
+
+  <script>
+    const g = 9.8;
+    const heightSlider = document.getElementById("heightSlider");
+    const massSlider = document.getElementById("massSlider");
+    const heightValue = document.getElementById("heightValue");
+    const massValue = document.getElementById("massValue");
+    const energyInfo = document.getElementById("energyInfo");
+    const object = document.getElementById("object");
+    const vizBox = document.getElementById("vizBox");
+    const log = document.getElementById("log");
+    const resetBtn = document.getElementById("resetBtn");
+    const dropBtn = document.getElementById("dropBtn");
+    const energyBar = document.getElementById("energyBar");
+
+    let height = parseInt(heightSlider.value);
+    let mass = parseInt(massSlider.value);
+
+    function updateVisualization() {
+      height = parseInt(heightSlider.value);
+      mass = parseInt(massSlider.value);
+      heightValue.textContent = ${height} m;
+      massValue.textContent = ${mass} kg;
+      updateEnergyDisplay(height, mass);
+    }
+
+    function updateEnergyDisplay(h, m) {
+      const totalEnergy = m * g * 50;
+      const potentialEnergy = m * g * h;
+      const kineticEnergy = totalEnergy - potentialEnergy;
+      energyInfo.textContent = Potential Energy: ${potentialEnergy.toFixed(1)} J | Kinetic Energy: ${kineticEnergy.toFixed(1)} J;
+      const percent = (potentialEnergy / totalEnergy) * 100;
+      energyBar.style.width = ${percent}%;
+      const boxHeight = vizBox.clientHeight - 56;
+      const yPos = boxHeight - (h / 50) * boxHeight;
+      object.style.bottom = ${yPos}px;
+      addLog(Height: ${h} m, Mass: ${m} kg);
+    }
+
+    function addLog(message) {
+      const li = document.createElement("li");
+      li.textContent = message;
+      log.prepend(li);
+      if (log.childElementCount > 6) log.removeChild(log.lastChild);
+    }
+
+    function dropObject() {
+      let currentHeight = 50;
+      const dropInterval = setInterval(() => {
+        if (currentHeight <= height) {
+          clearInterval(dropInterval);
+        } else {
+          currentHeight -= 1;
+          updateEnergyDisplay(currentHeight, mass);
+        }
+      }, 80);
+      addLog("Object dropped to simulate energy conversion");
+    }
+
+    heightSlider.addEventListener("input", updateVisualization);
+    massSlider.addEventListener("input", updateVisualization);
+    dropBtn.addEventListener("click", dropObject);
+    resetBtn.addEventListener("click", () => {
+      heightSlider.value = 25;
+      massSlider.value = 50;
+      log.innerHTML = "";
+      updateVisualization();
+    });
+
+    updateVisualization();
+  </script>
+</body>
+</html>

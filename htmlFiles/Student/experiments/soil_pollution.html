@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Soil Experiment Virtual Simulation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .plant {
+      transition: all 0.5s ease-in-out;
+    }
+    .leaf {
+      width: 20px;
+      height: 10px;
+      background: #22c55e;
+      border-radius: 50% 50% 0 0;
+      transform: rotate(-30deg);
+      position: absolute;
+    }
+    .leaf.right {
+      transform: rotate(30deg);
+      right: -15px;
+    }
+    .cloud {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: moveClouds 30s linear infinite;
+    }
+    @keyframes moveClouds {
+      0% { left: -200px; }
+      100% { left: 100%; }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-b from-sky-200 to-green-100 min-h-screen flex flex-col items-center">
+  <!-- Header -->
+  <header class="text-center my-6">
+    <h1 class="text-3xl font-bold text-green-800 drop-shadow-lg">Soil Experiment Virtual Simulation</h1>
+    <p class="text-lg text-green-700">Learn how soil types, moisture, and nutrients affect plant growth</p>
+  </header>
+
+  <!-- Main Layout -->
+  <div class="flex flex-col lg:flex-row gap-8 w-11/12 max-w-6xl">
+    <!-- Controls -->
+    <div class="flex-1 bg-white/70 backdrop-blur-md rounded-2xl shadow-xl p-6">
+      <h2 class="text-xl font-semibold text-green-700 mb-4">Controls</h2>
+
+      <label class="block mb-3">
+        <span class="font-medium text-gray-700">Soil Type</span>
+        <select id="soilType" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-2">
+          <option value="sandy">Sandy</option>
+          <option value="loamy" selected>Loamy</option>
+          <option value="clay">Clay</option>
+        </select>
+      </label>
+
+      <label class="block mb-3">
+        <span class="font-medium text-gray-700">Moisture Level (%)</span>
+        <input id="moisture" type="range" min="0" max="100" value="50" class="w-full accent-blue-500">
+      </label>
+
+      <label class="block mb-3">
+        <span class="font-medium text-gray-700">Fertilizer Level (%)</span>
+        <input id="fertilizer" type="range" min="0" max="100" value="50" class="w-full accent-green-500">
+      </label>
+
+      <div class="mt-4 flex gap-2">
+        <button id="resetBtn" class="bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded-lg shadow">Reset</button>
+        <a href="../virtual_experiments.html" class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg shadow">Back</a>
+      </div>
+    </div>
+
+    <!-- Visualization -->
+    <div class="flex-1 bg-white/70 backdrop-blur-md rounded-2xl shadow-xl p-6 relative overflow-hidden">
+      <!-- Sky & Sun -->
+      <div class="absolute top-4 right-6 w-16 h-16 bg-yellow-300 rounded-full animate-spin-slow shadow-lg"></div>
+      <!-- Clouds -->
+      <div class="cloud w-20 h-10 top-6" style="animation-delay:0s;"></div>
+      <div class="cloud w-24 h-12 top-12" style="animation-delay:10s;"></div>
+
+      <h2 class="text-xl font-semibold text-green-700 mb-4">Visualization</h2>
+      <div id="visualization" class="relative w-full h-72 flex flex-col justify-end items-center rounded-xl border shadow-inner overflow-hidden">
+        <!-- Soil -->
+        <div id="soil" class="w-full h-1/3 bg-[brown]"></div>
+        <!-- Plant -->
+        <div id="plant" class="plant w-4 bg-green-600 rounded-t-full" style="height:50px; position:absolute; bottom:33%;"></div>
+      </div>
+
+      <!-- Indicators -->
+      <p id="plantHealth" class="mt-4 text-lg font-semibold text-green-800">Plant Health: Good</p>
+      <div class="mt-4">
+        <h3 class="text-md font-semibold text-gray-700">Growth Log:</h3>
+        <ul id="growthLog" class="list-disc list-inside text-sm text-gray-600 mt-2 space-y-1"></ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const soilType = document.getElementById("soilType");
+    const moisture = document.getElementById("moisture");
+    const fertilizer = document.getElementById("fertilizer");
+    const soil = document.getElementById("soil");
+    const plant = document.getElementById("plant");
+    const plantHealth = document.getElementById("plantHealth");
+    const growthLog = document.getElementById("growthLog");
+    const resetBtn = document.getElementById("resetBtn");
+
+    function updateVisualization(action = null) {
+      // Soil colors
+      const soilColors = {
+        sandy: "#f4a460",
+        loamy: "#654321",
+        clay: "#b87333",
+      };
+      soil.style.backgroundColor = soilColors[soilType.value];
+
+      // Plant growth
+      const height = 50 + (parseInt(moisture.value) + parseInt(fertilizer.value)) / 2;
+      plant.style.height = height + "px";
+
+      // Plant color
+      const greenLevel = Math.min(255, 100 + parseInt(fertilizer.value) + parseInt(moisture.value));
+      plant.style.backgroundColor = rgb(0, ${greenLevel}, 0);
+
+      // Health indicator
+      let health = "Poor";
+      if (moisture.value > 30 && fertilizer.value > 30) health = "Good";
+      if (moisture.value > 60 && fertilizer.value > 60) health = "Excellent";
+      plantHealth.textContent = "Plant Health: " + health;
+
+      // Log
+      if (action) {
+        const li = document.createElement("li");
+        li.textContent = action;
+        growthLog.prepend(li);
+        if (growthLog.childElementCount > 3) {
+          growthLog.removeChild(growthLog.lastChild);
+        }
+      }
+    }
+
+    // Event listeners
+    soilType.addEventListener("change", () => updateVisualization("Soil changed to " + soilType.value));
+    moisture.addEventListener("input", () => updateVisualization("Moisture adjusted to " + moisture.value + "%"));
+    fertilizer.addEventListener("input", () => updateVisualization("Fertilizer adjusted to " + fertilizer.value + "%"));
+
+    resetBtn.addEventListener("click", () => {
+      soilType.value = "loamy";
+      moisture.value = 50;
+      fertilizer.value = 50;
+      growthLog.innerHTML = "";
+      updateVisualization("Simulation reset");
+    });
+
+    // Initial
+    updateVisualization();
+  </script>
+</body>
+</html>

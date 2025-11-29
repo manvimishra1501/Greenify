@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Air Pollution Virtual Experiment</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  #airVisual {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+    height: 300px;
+    width: 100%;
+    background: linear-gradient(to top, #87CEEB 0%, #ffffff 70%);
+    transition: background 0.5s;
+  }
+
+  .smoke, .cloud {
+    position: absolute;
+    bottom: 0;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  /* Smoke animation */
+  .smoke {
+    background: rgba(200,200,200,0.5);
+    animation: rise 5s linear infinite;
+  }
+
+  @keyframes rise {
+    0% { transform: translateY(0) scale(1); opacity: 0.5;}
+    50% { transform: translateY(-100px) scale(1.5); opacity: 0.7;}
+    100% { transform: translateY(-200px) scale(2); opacity: 0;}
+  }
+
+  /* Cloud animation */
+  .cloud {
+    background: rgba(255,255,255,0.7);
+    width: 60px;
+    height: 40px;
+    animation: floatCloud linear infinite;
+  }
+
+  @keyframes floatCloud {
+    0% { transform: translateX(-100px);}
+    100% { transform: translateX(110%);}
+  }
+
+  /* Sun/moon indicator */
+  #sun {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 2rem;
+  }
+</style>
+</head>
+<body class="bg-gradient-to-r from-blue-100 via-white to-green-100 min-h-screen flex flex-col items-center justify-start p-6">
+
+<header class="w-full text-center mb-6">
+  <h1 class="text-4xl font-bold text-gray-800 mb-2">🌫️ Air Pollution Virtual Experiment</h1>
+  <p class="text-gray-600 text-lg">Simulate the effects of pollutants on air quality and environment.</p>
+</header>
+
+<section class="bg-white shadow-lg rounded-2xl p-6 w-full max-w-3xl mb-6">
+  <h2 class="text-2xl font-semibold mb-4">Control the Pollution Levels</h2>
+
+  <div class="mb-4">
+    <label class="block text-gray-700 mb-1">CO₂ Emission:</label>
+    <input type="range" min="0" max="500" value="100" id="co2Slider" class="w-full">
+    <span id="co2Value" class="text-gray-600">100 ppm</span>
+  </div>
+
+  <div class="mb-4">
+    <label class="block text-gray-700 mb-1">Smoke Particles:</label>
+    <input type="range" min="0" max="100" value="20" id="smokeSlider" class="w-full">
+    <span id="smokeValue" class="text-gray-600">20%</span>
+  </div>
+
+  <div class="mb-6">
+    <label class="block text-gray-700 mb-1">Nitrogen Oxides (NOx):</label>
+    <input type="range" min="0" max="300" value="50" id="noxSlider" class="w-full">
+    <span id="noxValue" class="text-gray-600">50 ppb</span>
+  </div>
+
+  <div id="airVisual">
+    <div id="sun">☀️</div>
+  </div>
+</section>
+
+<button onclick="goBack()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full transition-all duration-300">
+  ← Back
+</button>
+
+<script>
+  const co2Slider = document.getElementById('co2Slider');
+  const smokeSlider = document.getElementById('smokeSlider');
+  const noxSlider = document.getElementById('noxSlider');
+  const co2Value = document.getElementById('co2Value');
+  const smokeValue = document.getElementById('smokeValue');
+  const noxValue = document.getElementById('noxValue');
+  const airVisual = document.getElementById('airVisual');
+
+  function updateVisualization() {
+    const co2 = parseInt(co2Slider.value);
+    const smoke = parseInt(smokeSlider.value);
+    const nox = parseInt(noxSlider.value);
+
+    co2Value.textContent = co2 + ' ppm';
+    smokeValue.textContent = smoke + '%';
+    noxValue.textContent = nox + ' ppb';
+
+    const pollutionLevel = (co2 + smoke*2 + nox)/3;
+
+    // Change background color to simulate polluted sky
+    if(pollutionLevel < 100){
+      airVisual.style.background = "linear-gradient(to top, #87CEEB 0%, #ffffff 70%)";
+      document.getElementById('sun').textContent = '☀️';
+    } else if(pollutionLevel < 200){
+      airVisual.style.background = "linear-gradient(to top, #FFDAB9 0%, #ffffff 70%)";
+      document.getElementById('sun').textContent = '🌤️';
+    } else if(pollutionLevel < 300){
+      airVisual.style.background = "linear-gradient(to top, #FFA07A 0%, #ffffff 70%)";
+      document.getElementById('sun').textContent = '🌫️';
+    } else {
+      airVisual.style.background = "linear-gradient(to top, #8B0000 0%, #ffffff 70%)";
+      document.getElementById('sun').textContent = '☠️';
+    }
+
+    updateSmoke(smoke);
+    updateClouds(pollutionLevel);
+  }
+
+  function updateSmoke(smokeLevel) {
+    // Remove old smoke particles
+    document.querySelectorAll('.smoke').forEach(s => s.remove());
+
+    const count = Math.floor(smokeLevel / 2);
+    for(let i=0;i<count;i++){
+      const particle = document.createElement('div');
+      particle.className = 'smoke';
+      particle.style.left = Math.random()*100 + '%';
+      particle.style.width = 10 + Math.random()*15 + 'px';
+      particle.style.height = 10 + Math.random()*15 + 'px';
+      particle.style.animationDuration = 3 + Math.random()*4 + 's';
+      airVisual.appendChild(particle);
+    }
+  }
+
+  function updateClouds(pollutionLevel){
+    // Remove old clouds
+    document.querySelectorAll('.cloud').forEach(c => c.remove());
+    const cloudCount = 5;
+    for(let i=0;i<cloudCount;i++){
+      const cloud = document.createElement('div');
+      cloud.className = 'cloud';
+      cloud.style.top = Math.random()*50 + 'px';
+      cloud.style.left = Math.random()*100 + '%';
+      cloud.style.width = 40 + Math.random()*60 + 'px';
+      cloud.style.height = 20 + Math.random()*30 + 'px';
+      cloud.style.animationDuration = 15 + Math.random()*10 + 's';
+      airVisual.appendChild(cloud);
+    }
+
+    // Darker clouds if high pollution
+    if(pollutionLevel > 200){
+      document.querySelectorAll('.cloud').forEach(c => c.style.background = 'rgba(100,100,100,0.6)');
+    }
+  }
+
+  co2Slider.addEventListener('input', updateVisualization);
+  smokeSlider.addEventListener('input', updateVisualization);
+  noxSlider.addEventListener('input', updateVisualization);
+  
+function goBack() {
+    window.location.href = "../virtual_experiments.html";
+}
+
+  updateVisualization();
+</script>
+</body>
+</html>

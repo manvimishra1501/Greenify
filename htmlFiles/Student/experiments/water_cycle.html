@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Water Cycle Experiment</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Water Cycle Animations */
+    .cloud {
+      width: 100px;
+      position: absolute;
+      top: 50px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 30px 10px 0 #fff, 60px 20px 0 #fff;
+    }
+
+    @keyframes float {
+      0% { transform: translateX(-150px); }
+      100% { transform: translateX(100vw); }
+    }
+
+    .rain {
+      width: 2px;
+      height: 12px;
+      background: #3b82f6;
+      position: absolute;
+      animation-name: fall;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    @keyframes fall {
+      0% { top: 0; opacity: 1; }
+      100% { top: 100px; opacity: 0; }
+    }
+
+    /* Water body */
+    .water-body {
+      width: 100%;
+      height: 80px;
+      background: linear-gradient(to top, #3b82f6, #60a5fa);
+      border-radius: 0 0 20px 20px;
+      position: absolute;
+      bottom: 0;
+      overflow: hidden;
+      transition: height 1s ease-in-out;
+      box-shadow: inset 0 5px 10px rgba(255, 255, 255, 0.2);
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      font-weight: bold;
+      color: white;
+      font-size: 14px;
+    }
+
+    /* Ripple effect */
+    .ripple {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border: 2px solid rgba(255, 255, 255, 0.7);
+      border-radius: 50%;
+      animation: rippleAnim 1s ease-out forwards;
+      pointer-events: none;
+    }
+
+    @keyframes rippleAnim {
+      0% { transform: scale(0); opacity: 0.8; }
+      100% { transform: scale(2.5); opacity: 0; }
+    }
+
+    .arrow {
+      position: absolute;
+      width: 80px;
+      height: 2px;
+      background: #10b981;
+      animation: moveArrow 2s linear infinite;
+    }
+
+    @keyframes moveArrow {
+      0% { background-position: 0 0; }
+      100% { background-position: 20px 0; }
+    }
+
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 140px;
+      background-color: #3b82f6;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 10;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -70px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body class="bg-blue-50 font-sans relative overflow-x-hidden">
+
+  <!-- HEADER -->
+  <header class="flex items-center justify-between bg-blue-600 px-6 py-4 text-white shadow-md">
+    <h1 class="text-2xl font-bold">Water Cycle Experiment</h1>
+    <a href="../virtual_experiments.html"
+      class="bg-white text-blue-600 px-4 py-2 rounded hover:bg-gray-100 font-semibold">Back</a>
+  </header>
+
+  <main class="p-6 max-w-5xl mx-auto space-y-6 relative">
+
+    <!-- Overview -->
+    <section class="bg-white shadow-md rounded-lg p-6 relative z-10">
+      <h2 class="text-xl font-bold mb-3 text-blue-700">Overview</h2>
+      <p class="text-gray-700">Observe how water moves through evaporation, condensation, precipitation, and collection. Adjust temperature to watch the cycle in action.</p>
+    </section>
+
+    <!-- Materials -->
+    <section class="bg-white shadow-md rounded-lg p-6 relative z-10">
+      <h2 class="text-xl font-bold mb-3 text-blue-700">Materials Required</h2>
+      <ul class="list-disc list-inside text-gray-700 space-y-1">
+        <li>Beaker with water</li>
+        <li>Heater or lamp</li>
+        <li>Condensation surface (lid or glass)</li>
+        <li>Marker to observe water level</li>
+        <li>Tray for collection</li>
+      </ul>
+    </section>
+
+    <!-- Simulation -->
+    <section class="bg-white shadow-md rounded-lg p-6 relative z-10">
+      <h2 class="text-xl font-bold mb-4 text-blue-700">Interactive Simulation</h2>
+      <p class="text-gray-700 mb-4">Adjust temperature to see evaporation, condensation, precipitation, and water collection.</p>
+
+      <!-- Temperature Slider -->
+      <div class="mb-6">
+        <label for="temperature" class="font-semibold text-gray-700">Temperature:</label>
+        <input type="range" id="temperature" min="0" max="100" value="50" class="w-full mt-1">
+        <span id="tempVal" class="ml-2 font-semibold text-blue-700">50°C</span>
+      </div>
+
+      <!-- Water Cycle Visualization -->
+      <div class="relative h-64 bg-blue-100 rounded-lg overflow-hidden">
+        <!-- Clouds -->
+        <div id="cloud1" class="cloud tooltip" style="top: 20px; left: 0;">
+          <span class="tooltiptext">Condensation</span>
+        </div>
+        <div id="cloud2" class="cloud tooltip" style="top: 60px; left: -200px;">
+          <span class="tooltiptext">Condensation</span>
+        </div>
+
+        <!-- Arrows -->
+        <div class="arrow" style="top: 100px; left: 50px; transform: rotate(45deg);"></div>
+        <div class="arrow" style="top: 120px; left: 200px; transform: rotate(-45deg);"></div>
+
+        <!-- Rain drops -->
+        <div id="rainContainer"></div>
+
+        <!-- Water body -->
+        <div id="waterBody" class="water-body"></div>
+      </div>
+    </section>
+
+    <!-- Observation -->
+    <section class="bg-white shadow-md rounded-lg p-6 relative z-10">
+      <h2 class="text-xl font-bold mb-3 text-blue-700">Observation</h2>
+      <p class="text-gray-700">As temperature increases, evaporation rate rises, clouds form faster, precipitation occurs quicker, and water collection rises.</p>
+    </section>
+
+    <!-- Conclusion -->
+    <section class="bg-white shadow-md rounded-lg p-6 relative z-10">
+      <h2 class="text-xl font-bold mb-3 text-blue-700">Conclusion</h2>
+      <p class="text-gray-700">The water cycle is driven by heat. Evaporation, condensation, precipitation, and collection maintain Earth's water balance.</p>
+    </section>
+
+  </main>
+
+  <script>
+    const temperatureSlider = document.getElementById('temperature');
+    const tempVal = document.getElementById('tempVal');
+    const rainContainer = document.getElementById('rainContainer');
+    const waterBody = document.getElementById('waterBody');
+    const clouds = [document.getElementById('cloud1'), document.getElementById('cloud2')];
+
+    function updateCycle() {
+      const temp = parseInt(temperatureSlider.value);
+      tempVal.textContent = temp + "°C";
+
+      // Clear previous raindrops
+      rainContainer.innerHTML = "";
+
+      // Rain drops count based on temp
+      const rainDropsCount = Math.floor(temp / 5);
+      for (let i = 0; i < rainDropsCount; i++) {
+        const drop = document.createElement('div');
+        drop.className = 'rain';
+        drop.style.left = Math.random() * 100 + '%';
+        drop.style.top = Math.random() * 50 + 'px';
+        drop.style.animationDuration = (0.5 + Math.random() * 1) + 's';
+        rainContainer.appendChild(drop);
+
+        // Add ripple effect on water
+        setTimeout(() => {
+          const ripple = document.createElement('div');
+          ripple.className = 'ripple';
+          ripple.style.left = drop.style.left;
+          ripple.style.bottom = '0';
+          waterBody.appendChild(ripple);
+          setTimeout(() => ripple.remove(), 1000);
+        }, 1000);
+      }
+
+      // Cloud color changes with temp
+      clouds.forEach(c => c.style.backgroundColor = `rgba(255,255,255,${0.5 + temp / 200})`);
+
+      // Water level rises smoothly
+      waterBody.style.height = 80 + rainDropsCount * 0.7 + 'px';
+      waterBody.textContent = Math.min(100, 40 + rainDropsCount) + "%";
+
+      // Cloud speed changes with temp
+      clouds.forEach((c, i) => {
+        c.style.animation = `float ${10 - temp / 20}s linear ${i * 0.5}s infinite`;
+      });
+    }
+
+    temperatureSlider.addEventListener('input', updateCycle);
+    updateCycle();
+  </script>
+</body>
+
+</html>

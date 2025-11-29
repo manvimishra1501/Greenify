@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photosynthesis Experiment</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Plant animation */
+    .plant {
+      width: 150px;
+      transition: transform 0.5s;
+    }
+
+    .plant-grow {
+      transform: scale(1.2);
+    }
+  </style>
+</head>
+
+<body class="bg-green-50 font-sans">
+
+  <!-- HEADER -->
+  <header class="flex items-center justify-between bg-green-600 px-6 py-4 text-white shadow-md">
+    <h1 class="text-2xl font-bold">Photosynthesis Experiment</h1>
+    <a href="../virtual_experiments.html"
+      class="bg-white text-green-600 px-4 py-2 rounded hover:bg-gray-100 font-semibold">Back</a>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="p-6 max-w-5xl mx-auto space-y-6">
+
+    <!-- Experiment Overview -->
+    <section class="bg-white shadow-md rounded-lg p-6">
+      <h2 class="text-xl font-bold mb-3 text-green-700">Overview</h2>
+      <p class="text-gray-700">Observe how plants convert sunlight, carbon dioxide, and water into glucose and oxygen. Adjust environmental factors and watch how photosynthesis responds.</p>
+    </section>
+
+    <!-- Materials -->
+    <section class="bg-white shadow-md rounded-lg p-6">
+      <h2 class="text-xl font-bold mb-3 text-green-700">Materials Required</h2>
+      <ul class="list-disc list-inside text-gray-700 space-y-1">
+        <li>Fresh spinach leaves</li>
+        <li>Water</li>
+        <li>Beaker or bowl</li>
+        <li>Light source (sunlight or lamp)</li>
+        <li>Iodine solution</li>
+        <li>Dropper</li>
+      </ul>
+    </section>
+
+    <!-- Interactive Simulation -->
+    <section class="bg-white shadow-md rounded-lg p-6">
+      <h2 class="text-xl font-bold mb-4 text-green-700">Interactive Simulation</h2>
+      <p class="text-gray-700 mb-4">Adjust sunlight, water, and CO₂ levels and see how the plant reacts.</p>
+
+      <div class="flex flex-col md:flex-row gap-6">
+
+        <!-- Plant Visual -->
+        <div class="flex flex-col items-center">
+          <img id="plant" src="plant.png" alt="Plant" class="plant mb-4">
+          <div class="w-64 h-6 bg-gray-200 rounded-full overflow-hidden">
+            <div id="progressBar" class="h-6 bg-green-500 w-0 rounded-full transition-all"></div>
+          </div>
+          <p id="photosynthesisLevel" class="mt-2 text-gray-700 font-semibold">Photosynthesis Level: 0%</p>
+        </div>
+
+        <!-- Sliders -->
+        <div class="flex-1 space-y-4">
+          <!-- Sunlight -->
+          <div>
+            <label for="sunlight" class="font-semibold text-gray-700">Sunlight:</label>
+            <input type="range" id="sunlight" min="0" max="100" value="50" class="w-full mt-1">
+            <span id="sunlightVal" class="ml-2 font-semibold text-green-700">50</span>
+          </div>
+
+          <!-- Water -->
+          <div>
+            <label for="water" class="font-semibold text-gray-700">Water:</label>
+            <input type="range" id="water" min="0" max="100" value="50" class="w-full mt-1">
+            <span id="waterVal" class="ml-2 font-semibold text-green-700">50</span>
+          </div>
+
+          <!-- CO2 -->
+          <div>
+            <label for="co2" class="font-semibold text-gray-700">CO₂:</label>
+            <input type="range" id="co2" min="0" max="100" value="50" class="w-full mt-1">
+            <span id="co2Val" class="ml-2 font-semibold text-green-700">50</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Observation -->
+    <section class="bg-white shadow-md rounded-lg p-6">
+      <h2 class="text-xl font-bold mb-3 text-green-700">Observation</h2>
+      <p class="text-gray-700">The plant grows better as sunlight, water, and CO₂ levels approach optimal values. Use the sliders to see the effect in real-time!</p>
+    </section>
+
+    <!-- Conclusion -->
+    <section class="bg-white shadow-md rounded-lg p-6">
+      <h2 class="text-xl font-bold mb-3 text-green-700">Conclusion</h2>
+      <p class="text-gray-700">Photosynthesis is influenced by sunlight, water, and CO₂ availability. Interactive simulations help visualize how plants produce glucose and oxygen efficiently.</p>
+    </section>
+
+  </main>
+
+  <!-- SCRIPT FOR INTERACTIVITY -->
+  <script>
+    const sunlightSlider = document.getElementById('sunlight');
+    const waterSlider = document.getElementById('water');
+    const co2Slider = document.getElementById('co2');
+
+    const sunlightVal = document.getElementById('sunlightVal');
+    const waterVal = document.getElementById('waterVal');
+    const co2Val = document.getElementById('co2Val');
+
+    const plant = document.getElementById('plant');
+    const progressBar = document.getElementById('progressBar');
+    const photosynthesisLevel = document.getElementById('photosynthesisLevel');
+
+    function updatePhotosynthesis() {
+      const sunlight = parseInt(sunlightSlider.value);
+      const water = parseInt(waterSlider.value);
+      const co2 = parseInt(co2Slider.value);
+
+      sunlightVal.textContent = sunlight;
+      waterVal.textContent = water;
+      co2Val.textContent = co2;
+
+      // Simple formula: average of factors
+      const level = Math.round((sunlight + water + co2) / 3);
+      progressBar.style.width = `${level}%`;
+      photosynthesisLevel.textContent = `Photosynthesis Level: ${level}%`;
+
+      // Animate plant growth if level > 60
+      if (level > 60) {
+        plant.classList.add('plant-grow');
+      } else {
+        plant.classList.remove('plant-grow');
+      }
+    }
+
+    sunlightSlider.addEventListener('input', updatePhotosynthesis);
+    waterSlider.addEventListener('input', updatePhotosynthesis);
+    co2Slider.addEventListener('input', updatePhotosynthesis);
+
+    // Initialize
+    updatePhotosynthesis();
+  </script>
+
+</body>
+
+</html>
